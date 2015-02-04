@@ -3,9 +3,7 @@ var router = express.Router();
 
 
 router.post('/', function(req, res) {
-  //TODO: Need to implement.
-  console.log(req.params);
-  res.send('Success,add user!');
+  res.send(req.body);
 });
 
 module.exports = router;
