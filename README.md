@@ -2,7 +2,7 @@
 
 
 与client端的路径关系为
-- ---muggles
+- ---muggles-client
     - --app
 - ---muggles-server
 

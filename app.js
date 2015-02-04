@@ -20,10 +20,10 @@ app.use(cookieParser());
 if (app.get('env') === 'development') {
 
   // This will change in production since we'll be using the dist folder
-  app.use(express.static(path.join(__dirname, '../muggles')));
+  app.use(express.static(path.join(__dirname, '../muggles-client')));
   // This covers serving up the index page
-  app.use(express.static(path.join(__dirname, '../muggles/.tmp')));
-  app.use(express.static(path.join(__dirname, '../muggles/app')));
+  app.use(express.static(path.join(__dirname, '../muggles-client/.tmp')));
+  app.use(express.static(path.join(__dirname, '../muggles-client/app')));
 
   // development error handler
   // will print stacktrace
