@@ -3,11 +3,7 @@
 
 与client端的路径关系为
 - ---muggles
-<<<<<<< HEAD
     - --app
-=======
--   --app
->>>>>>> a141ca7f2edac3ab721b9d3627949f92b7f4218f
 - ---muggles-server
 
 启动服务器运行`npm test`，端口为3000，
