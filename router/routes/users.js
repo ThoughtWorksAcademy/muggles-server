@@ -2,8 +2,15 @@ var express = require('express');
 var router = express.Router();
 
 
-router.post('/', function(req, res) {
-  res.send(req.body);
-});
 
-module.exports = router;
+
+module.exports = function(passport){
+
+  router.post('/', passport.authenticate('login', {
+    successRedirect: '/home',
+    failureRedirect: '/',
+    failureFlash: true
+  }));
+
+  return router;
+};
