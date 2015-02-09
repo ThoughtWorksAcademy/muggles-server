@@ -1,5 +1,5 @@
-module.exports = function(app) {
+module.exports = function(app, passport) {
   app.use('/api/categories', require('./routes/categories'));
   app.use('/api/items', require('./routes/items'));
-  app.use('/api/users', require('./routes/users'));
+  app.use('/api/users', require('./routes/users')(passport));
 };

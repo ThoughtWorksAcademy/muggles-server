@@ -5,11 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+
 
 var app = express();
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -17,17 +18,26 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 
+// Configuring Passport
+var passport = require('passport');
+var expressSession = require('express-session');
+app.use(expressSession({secret: 'mySecretKey'}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+var flash = require('connect-flash');
+app.use(flash());
+
+// Initialize Passport
+var initPassport = require('./passport/init');
+initPassport(passport);
 // development settings
 if (app.get('env') === 'development') {
-
-  // This will change in production since we'll be using the dist folder
   app.use(express.static(path.join(__dirname, '../muggles-client')));
   // This covers serving up the index page
   app.use(express.static(path.join(__dirname, '../muggles-client/.tmp')));
   app.use(express.static(path.join(__dirname, '../muggles-client/app')));
 
-  // development error handler
-  // will print stacktrace
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -37,14 +47,9 @@ if (app.get('env') === 'development') {
   });
 }
 
-// production settings
 if (app.get('env') === 'production') {
-
-  // changes it to use the optimized version for production
   app.use(express.static(path.join(__dirname, '/dist')));
 
-  // production error handler
-  // no stacktraces leaked to user
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -55,6 +60,5 @@ if (app.get('env') === 'production') {
 }
 
 // routes
-var router = require('./router')(app);
-
+var router = require('./router')(app, passport);
 module.exports = app;

@@ -1,13 +1,12 @@
 var LocalStrategy = require('passport-local').Strategy;
-var User = require('../models/user');
+var User = require('../public/model/user');
 
 
 module.exports = function(passport){
-  passport.use('login', new LocalStrategy({
-    passReqToCallback: true
-  },
-  function(req, username, password, done) {
+  passport.use('login', new LocalStrategy({ passReqToCallback: true },
 
+  function(req, username, password, done) {
+  console.log('there' + username + password + '-----------');
     User.findOne({'username': username},
     function(err, user) {
       if(err) {
@@ -16,7 +15,7 @@ module.exports = function(passport){
       }
 
       if(!user) {
-        console.log('user not found');
+        console.log('user not found-------------------1');
         return done(null, false, req.flash('massage', 'User Not fount'));
       }
 
