@@ -1,13 +1,7 @@
-var LocalStrategy   = require('passport-local').Strategy;
 var User = require('../public/model/user');
-var bCrypt = require('bcrypt-nodejs');
 
-module.exports = function(passport){
+module.exports = function(){
 
-  passport.use('signup', new LocalStrategy({
-        passReqToCallback : true },
-      function(req, username, password, done) {
-        console.log('in signup');
         findOrCreateUser = function(){
           User.findOne({ 'username' :  username }, function(err, user) {
             if (err){
@@ -35,14 +29,4 @@ module.exports = function(passport){
             }
           });
         };
-
-        process.nextTick(findOrCreateUser);
-      })
-  );
-
-  // Generates hash using bCrypt
-  var createHash = function(password){
-    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-  }
-
 };
