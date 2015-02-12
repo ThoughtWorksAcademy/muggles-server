@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../../public/model/user');
 var Checkpoint = require('../../public/model/checkpoint');
+var _ = require('lodash');
 
 module.exports = function(passport){
 
@@ -104,6 +105,13 @@ module.exports = function(passport){
       res.send(checkpoints);
     });
 
+  });
+
+
+  router.patch('/course/checkpoints', function(req, res) {
+      _.forEach(req.body, function(checkpointId) {
+        console.log(checkpointId);
+      });
   });
 
   return router;
