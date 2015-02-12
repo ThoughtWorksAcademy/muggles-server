@@ -10,6 +10,7 @@ mongoose.connect('mongodb://localhost/test');
 
 
 var app = express();
+var port = process.env.PORT || 3000;
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -58,7 +59,7 @@ if (app.get('env') === 'production') {
     });
   });
 }
-
+console.log('Express app started on port ' + port);
 // routes
 var router = require('./router')(app, passport);
 module.exports = app;
