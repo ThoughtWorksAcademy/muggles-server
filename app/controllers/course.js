@@ -8,8 +8,7 @@ exports.create = function(req, res) {
     if(err) {
       return '课程创建失败';
     }
-
-
+    console.log('课程创建成功');
   });
 };
 
