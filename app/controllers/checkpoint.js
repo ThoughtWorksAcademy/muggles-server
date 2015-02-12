@@ -10,3 +10,8 @@ exports.create = function(req, res) {
     console.log('checkpoint 创建成功')
   })
 };
+
+exports.show = function(req, res) {
+  var checkpoint = new Checkpoint();
+  res.send(checkpoint);
+};
