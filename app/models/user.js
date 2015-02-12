@@ -6,8 +6,8 @@ var UserSchema = new Schema({
   password: String,
   courses: [{
     course: {type: Schema.ObjectId, ref : 'User'},
-    coach: {},
-    trainer: {}
+    coach: {type: String , default: '待定义coach'},
+    trainer: {type: String , default: '待定义trainer'}
   }]
 });
 
