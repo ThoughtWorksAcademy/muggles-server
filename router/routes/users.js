@@ -73,40 +73,40 @@ module.exports = function(passport){
 
   router.get('/course/checkpoints', function(req, res) {
     console.log('/user/course/checkpoints');
-    var CheckpointType = mongoose.model('CheckpointType');
-    var checkpointType = new CheckpointType();
-    checkpointType.name = '默认类型';
-    var checkpoint = new Checkpoint();
-    checkpoint.name = '牛顿第一定律';
-    checkpoint.type = checkpointType._id;
-    checkpoint.save(function(err) {
-      if(err) {
-        console.log('save checkpoint err' + err);
-        throw err;
-      }
-    });
-
-    var checkpoint2 = new Checkpoint();
-    checkpoint2.type = checkpointType._id;
-
-    checkpoint2.name = '牛顿第二定律';
-    checkpoint2.save(function(err) {
-      if(err) {
-        console.log('save checkpoint err' + err);
-        throw err;
-      }
-    });
-
-    var checkpoint3 = new Checkpoint();
-    checkpoint3.name = '牛顿第三定律';
-    checkpoint3.type = checkpointType._id;
-
-    checkpoint3.save(function(err) {
-      if(err) {
-        console.log('save checkpoint err' + err);
-        throw err;
-      }
-    });
+    //var CheckpointType = mongoose.model('CheckpointType');
+    //var checkpointType = new CheckpointType();
+    //checkpointType.name = '默认类型';
+    //var checkpoint = new Checkpoint();
+    //checkpoint.name = '牛顿第一定律';
+    //checkpoint.type = checkpointType._id;
+    //checkpoint.save(function(err) {
+    //  if(err) {
+    //    console.log('save checkpoint err' + err);
+    //    throw err;
+    //  }
+    //});
+    //
+    //var checkpoint2 = new Checkpoint();
+    //checkpoint2.type = checkpointType._id;
+    //
+    //checkpoint2.name = '牛顿第二定律';
+    //checkpoint2.save(function(err) {
+    //  if(err) {
+    //    console.log('save checkpoint err' + err);
+    //    throw err;
+    //  }
+    //});
+    //
+    //var checkpoint3 = new Checkpoint();
+    //checkpoint3.name = '牛顿第三定律';
+    //checkpoint3.type = checkpointType._id;
+    //
+    //checkpoint3.save(function(err) {
+    //  if(err) {
+    //    console.log('save checkpoint err' + err);
+    //    throw err;
+    //  }
+    //});
 
     Checkpoint.find({}, function(err, checkpoints) {
       console.log(checkpoints);
