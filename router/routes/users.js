@@ -109,16 +109,22 @@ module.exports = function(passport){
     //});
 
     Checkpoint.find({}, function(err, checkpoints) {
-      console.log(checkpoints);
       res.send(checkpoints);
     });
-
   });
-
 
   router.patch('/course/checkpoints', function(req, res) {
       _.forEach(req.body, function(checkpointId) {
-        console.log(checkpointId);
+        Checkpoint.findById(checkpointId, function(err, checkpoint) {
+          if(err) console.log('修改失败');
+          console.log(checkpoint);
+          checkpoint.checked = true;
+
+          checkpoint.save(function (err) {
+            console.log('修改成功');
+          });
+
+        });
       });
   });
 
