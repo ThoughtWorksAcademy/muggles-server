@@ -5,5 +5,5 @@ var Checkpoint = new Schema({
   name: String,
   type: {type : Schema.ObjectId, ref : 'CheckpointType'}
 });
-
+console.log('to models/checkpoints');
 mongoose.model('Checkpoint', Checkpoint);

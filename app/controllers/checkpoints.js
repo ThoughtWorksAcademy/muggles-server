@@ -13,5 +13,16 @@ exports.create = function(req, res) {
 
 exports.show = function(req, res) {
   var checkpoint = new Checkpoint();
-  res.send(checkpoint);
+  checkpoint.name = '牛顿第一定律';
+  checkpoint.type = '牛顿三大定律';
+  checkpoint.save(function(err) {
+    if(err) {
+      console.log('save checkpoint err' + err);
+      throw err;
+    }
+  });
+
+  Checkpoint.find({}, function(err, checkpoints) {
+    res.send(checkpoints);
+  });
 };
