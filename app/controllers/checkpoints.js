@@ -26,3 +26,9 @@ exports.show = function(req, res) {
     res.send(checkpoints);
   });
 };
+
+exports.index = function(req, res){
+  Checkpoint.list(function(err, articles) {
+
+  });
+};

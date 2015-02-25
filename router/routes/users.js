@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 var Checkpoint = mongoose.model('Checkpoint');
 var User = require('../../public/model/user');
+var CheckpointController = require('Checkpoints');
 
 var _ = require('lodash');
 
