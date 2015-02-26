@@ -2,12 +2,15 @@ var mongoose = require('mongoose');
 var express = require('express');
 var router = express.Router();
 var Checkpoint = mongoose.model('Checkpoint');
-var User = require('../../public/model/user');
-var CheckpointController = require('Checkpoints');
+var User = mongoose.model('User');
 
 var _ = require('lodash');
 
 module.exports = function(passport){
+
+  router.get('/login', function(req, res) {
+    res.send('views/login.html');
+  });
 
   router.post('/login', passport.authenticate('login', {
     successRedirect: '/views/course',
@@ -31,44 +34,44 @@ module.exports = function(passport){
   //  });
 
 
-  router.post('/signup', function(req, res) {
-    var username = req.body.username;
-    var password = req.body.password;
-
-    var massage = '';
-    var redirect = '';
-    User.findOne({ 'username' :  username }, function(err, user) {
-      if (err){
-        massage = '注册错误' + err;
-        console.log('Error in SignUp: '+err);
-        res.send(massage);
-      }
-
-      if (user) {
-        massage = '用户已存在' + username;
-        console.log('User already exists with username: '+username);
-        res.send(massage);
-      } else {
-        var newUser = new User();
-
-        newUser.username = username;
-        newUser.password = password;
-
-        newUser.save(function(err) {
-          if (err){
-            massage = '保存用户错误' + err;
-            console.log('Error in Saving user: '+err);
-            throw err;
-          }
-          massage = '用户注册成功';
-          redirect = 'views/courses.html';
-          result = {massage: massage, redirect: redirect};
-          console.log('User Registration succesful');
-          res.send(result);
-        });
-      }
-    });
-  });
+  //router.post('/signup', function(req, res) {
+  //  var username = req.body.username;
+  //  var password = req.body.password;
+  //
+  //  var massage = '';
+  //  var redirect = '';
+  //  User.findOne({ 'username' :  username }, function(err, user) {
+  //    if (err){
+  //      massage = '注册错误' + err;
+  //      console.log('Error in SignUp: '+err);
+  //      res.send(massage);
+  //    }
+  //
+  //    if (user) {
+  //      massage = '用户已存在' + username;
+  //      console.log('User already exists with username: '+username);
+  //      res.send(massage);
+  //    } else {
+  //      var newUser = new User();
+  //
+  //      newUser.username = username;
+  //      newUser.password = password;
+  //
+  //      newUser.save(function(err) {
+  //        if (err){
+  //          massage = '保存用户错误' + err;
+  //          console.log('Error in Saving user: '+err);
+  //          throw err;
+  //        }
+  //        massage = '用户注册成功';
+  //        redirect = 'views/courses.html';
+  //        result = {massage: massage, redirect: redirect};
+  //        console.log('User Registration succesful');
+  //        res.send(result);
+  //      });
+  //    }
+  //  });
+  //});
 
 
 
