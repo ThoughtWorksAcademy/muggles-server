@@ -6,9 +6,9 @@ var User = mongoose.model('User');
 
 var _ = require('lodash');
 
-module.exports = function(passport){
+module.exports = function (passport) {
 
-  router.get('/login', function(req, res) {
+  router.get('/login', function (req, res) {
     res.send('views/login.html');
   });
 
@@ -74,8 +74,7 @@ module.exports = function(passport){
   //});
 
 
-
-  router.get('/course/checkpoints', function(req, res) {
+  router.get('/course/checkpoints', function (req, res) {
     console.log('/user/course/checkpoints');
     //var CheckpointType = mongoose.model('CheckpointType');
     //var checkpointType = new CheckpointType();
@@ -112,24 +111,24 @@ module.exports = function(passport){
     //  }
     //});
 
-    Checkpoint.find({}, function(err, checkpoints) {
+    Checkpoint.find({}, function (err, checkpoints) {
       res.send(checkpoints);
     });
   });
 
-  router.patch('/course/checkpoints', function(req, res) {
-      _.forEach(req.body, function(checkpointId) {
-        Checkpoint.findById(checkpointId, function(err, checkpoint) {
-          if(err) console.log('修改失败');
-          console.log(checkpoint);
-          checkpoint.checked = true;
+  router.patch('/course/checkpoints', function (req, res) {
+    _.forEach(req.body, function (checkpointId) {
+      Checkpoint.findById(checkpointId, function (err, checkpoint) {
+        if (err) console.log('修改失败');
+        console.log(checkpoint);
+        checkpoint.checked = true;
 
-          checkpoint.save(function (err) {
-            console.log('修改成功');
-          });
-
+        checkpoint.save(function (err) {
+          console.log('修改成功');
         });
+
       });
+    });
   });
 
   return router;

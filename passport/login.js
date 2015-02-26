@@ -3,35 +3,35 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
 
-module.exports = function(passport){
-  passport.use('login', new LocalStrategy({ passReqToCallback: true },
+module.exports = function (passport) {
+  passport.use('login', new LocalStrategy({passReqToCallback: true},
 
-  function(req, username, password, done) {
-    //var user = new User();
-    //user.password = 'sigh';
-    //user.username = 'sigh';
-    //user.save();
+    function (req, username, password, done) {
+      //var user = new User();
+      //user.password = 'sigh';
+      //user.username = 'sigh';
+      //user.save();
 
-    User.findOne({'username': username},
-    function(err, user) {
-      if(err) {
-        console.log('err');
-        return done(err);
-      }
+      User.findOne({'username': username},
+        function (err, user) {
+          if (err) {
+            console.log('err');
+            return done(err);
+          }
 
-      if(!user) {
-        return done(null, false, req.flash('massage', 'User Not fount'));
-      }
+          if (!user) {
+            return done(null, false, req.flash('massage', 'User Not fount'));
+          }
 
-      if(!isValidPassword(user, password)) {
-        return done(null, false, req.flash('message', 'Invalid Password'));
-      }
+          if (!isValidPassword(user, password)) {
+            return done(null, false, req.flash('message', 'Invalid Password'));
+          }
 
-      return done(null, user);
-    })
-  }));
+          return done(null, user);
+        })
+    }));
 
-  var isValidPassword = function(user, password){
+  var isValidPassword = function (user, password) {
     return password == user.password;
   }
 };
