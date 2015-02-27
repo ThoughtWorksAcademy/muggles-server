@@ -1,23 +1,18 @@
 var login = require('./login');
-//var signup = require('./signup');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+
 module.exports = function (passport) {
 
   passport.serializeUser(function (user, done) {
-    console.log('serializing user: ');
-    console.log(user);
     done(null, user._id);
   });
 
   passport.deserializeUser(function (id, done) {
     User.findById(id, function (err, user) {
-      console.log('deserializing user:', user);
       done(err, user);
     });
   });
-
+  console.log('init login');
   login(passport);
-  //signup(passport);
-
 };

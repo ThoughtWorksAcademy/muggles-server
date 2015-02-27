@@ -8,15 +8,11 @@ var _ = require('lodash');
 
 module.exports = function (passport) {
 
-  router.get('/login', function (req, res) {
-    res.send('views/login.html');
+  router.post('/login', passport.authenticate('login', {failureRedirect: '/'}),
+  function(req, res) {
+    res.send(req.user);
+    console.log('登录成功');
   });
-
-  router.post('/login', passport.authenticate('login', {
-    successRedirect: '/views/course',
-    failureRedirect: '/views/courses.html',
-    failureFlash: true
-  }));
 
   //router.post('/signup',
   //  passport.authenticate('signup'),

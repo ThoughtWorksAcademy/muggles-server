@@ -4,13 +4,13 @@ var User = mongoose.model('User');
 
 
 module.exports = function (passport) {
-  passport.use('login', new LocalStrategy({passReqToCallback: true},
-
-    function (req, username, password, done) {
-      //var user = new User();
-      //user.password = 'sigh';
-      //user.username = 'sigh';
-      //user.save();
+  passport.use('login', new LocalStrategy(
+    function (username, password, done) {
+      console.log('enter passport login');
+      var user = new User();
+      user.password = 'sigh';
+      user.username = 'sigh';
+      user.save();
 
       User.findOne({'username': username},
         function (err, user) {
@@ -20,11 +20,11 @@ module.exports = function (passport) {
           }
 
           if (!user) {
-            return done(null, false, req.flash('massage', 'User Not fount'));
+            return done(null, false);
           }
 
           if (!isValidPassword(user, password)) {
-            return done(null, false, req.flash('message', 'Invalid Password'));
+            return done(null, false);
           }
 
           return done(null, user);
