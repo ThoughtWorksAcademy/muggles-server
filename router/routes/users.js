@@ -3,15 +3,37 @@ var express = require('express');
 var router = express.Router();
 var Checkpoint = mongoose.model('Checkpoint');
 var User = mongoose.model('User');
-
 var _ = require('lodash');
-
+var LocalStrategy = require('passport-local').Strategy;
 module.exports = function (passport) {
 
-  router.post('/login', passport.authenticate('login', {failureRedirect: '/'}),
-  function(req, res) {
-    res.send(req.user);
-    console.log('登录成功');
+  passport.use(new LocalStrategy(
+    function(username, password, done) {
+      process.nextTick(function () {
+        User.findOne({'username': username}, function(err, user) {
+          if (err) { return done(err); }
+          if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
+          if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
+          return done(null, user);
+        })
+      });
+    }
+  ));
+
+  router.post('/login', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+      if (err) { return next(err) }
+
+      if (!user) {
+        return res.status(401).send(info.message);
+      }
+
+      req.logIn(user, function(err) {
+        if (err) { return next(err); }
+        return res.send(user);
+      });
+
+    })(req, res, next);
   });
 
   //router.post('/signup',
