@@ -24,20 +24,14 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 
-// Configuring Passport
+// Passport
 var passport = require('passport');
-var expressSession = require('express-session');
-app.use(expressSession({secret: 'mySecretKey'}));
 app.use(passport.initialize());
-app.use(passport.session());
-
-var flash = require('connect-flash');
-app.use(flash());
-
-// Initialize Passport
 var initPassport = require('./passport/init');
 initPassport(passport);
-// development settings
+
+
+//development settings
 if (app.get('env') === 'development') {
   app.use(express.static(path.join(__dirname, '../muggles-client')));
   // This covers serving up the index page
@@ -65,6 +59,7 @@ if (app.get('env') === 'production') {
   });
 }
 console.log('Express app started on port ' + port);
+
 // routes
 var router = require('./router')(app, passport);
 module.exports = app;

@@ -1,7 +1,3 @@
-var login = require('./login');
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
-
 module.exports = function (passport) {
 
   passport.serializeUser(function (user, done) {
@@ -13,6 +9,4 @@ module.exports = function (passport) {
       done(err, user);
     });
   });
-  console.log('init login');
-  login(passport);
 };
