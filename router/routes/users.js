@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 var Checkpoint = mongoose.model('Checkpoint');
 var CheckpointUsed = mongoose.model('CheckpointUsed');
+var Course = mongoose.model('Course');
 var User = mongoose.model('User');
 var _ = require('lodash');
 var LocalStrategy = require('passport-local').Strategy;
@@ -137,7 +138,6 @@ module.exports = function (passport) {
 
   router.get('/courses', function (req, res) {
     console.log('api/user/courses');
-    var Course = mongoose.model('Course');
     //var course = new Course();
     //
     //course.name = '面向对象';
@@ -152,6 +152,16 @@ module.exports = function (passport) {
     })
 
   });
+
+  router.get('/courses/:id', function (req, res){
+    console.log(req.params.id);
+    Course.findById(req.params.id, function (err, course) {
+      if(err) console.log('获取失败');
+
+      res.send(course);
+    });
+  });
+
   router.patch('/course/checkpoints', function (req, res) {
     _.forEach(req.body, function (checkpointId) {
       Checkpoint.findById(checkpointId, function (err, checkpoint) {
