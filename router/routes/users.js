@@ -140,7 +140,15 @@ module.exports = function (passport) {
     console.log('api/user/courses');
     //var course = new Course();
     //
-    //course.name = '面向对象';
+    //course.name = '面向对象checkpoints';
+    //course.checkpoints.push('54f682ffe6f9fac64166fd19');
+    ////course.checkpoints.push('54f682ffe6f9fac64166fd18');
+    ////course.checkpoints.push('54f682ffe6f9fac64166fd17');
+    ////course.checkpoints.push('54f682ffe6f9fac64166fd16');
+    ////course.checkpoints.push('54f682ffe6f9fac64166fd15');
+    ////course.checkpoints.push('54f682ffe6f9fac64166fd14');
+    ////course.checkpoints.push('54f682ffe6f9fac64166fd13');
+    ////course.checkpoints.push('54f682ffe6f9fac64166fd12');
     //course.save(function (err) {
     //  if(err) {
     //    throw err;
@@ -153,13 +161,25 @@ module.exports = function (passport) {
 
   });
 
-  router.get('/courses/:id', function (req, res){
-    console.log(req.params.id);
-    Course.findById(req.params.id, function (err, course) {
-      if(err) console.log('获取失败');
+  //
+  //router.get('/courses/:id', function (req, res){
+  //  console.log(req.params.id);
+  //  Course.findById(req.params.id, function (err, course) {
+  //    if(err) console.log('获取失败');
+  //
+  //    res.send(course);
+  //  });
+  //});
 
-      res.send(course);
-    });
+  router.get('/courses/:id', function(req, res) {
+    Course.findById(req.params.id)
+      .populate('checkpoints')
+      .exec(
+      function (err, course){
+        console.log(course);
+        res.send(course);
+      }
+    );
   });
 
   router.patch('/course/checkpoints', function (req, res) {
