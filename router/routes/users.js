@@ -37,22 +37,6 @@ module.exports = function (passport) {
     })(req, res, next);
   });
 
-  //router.post('/signup',
-  //  passport.authenticate('signup'),
-  //
-  //  function(req, res) {
-  //
-  //      var result = {
-  //        massage: 'signup success',
-  //        redirect: 'views/courses.html',
-  //        data: ''
-  //      };
-  //      res.send(result);
-  //
-  //    console.log('注册成功');
-  //  });
-
-
   //router.post('/signup', function(req, res) {
   //  var username = req.body.username;
   //  var password = req.body.password;
@@ -92,100 +76,99 @@ module.exports = function (passport) {
   //  });
   //});
 
+  router.post('/course/checkpoints', function () {
+    var CheckpointType = mongoose.model('CheckpointType');
+    var checkpointType = new CheckpointType();
+    checkpointType.name = '默认类型';
+    var checkpoint = new Checkpoint();
+    checkpoint.name = '牛顿第一定律';
+    checkpoint.type = checkpointType._id;
+    checkpoint.save(function(err) {
+      if(err) {
+        console.log('save checkpoint err' + err);
+        throw err;
+      }
+    });
+
+    var checkpoint2 = new Checkpoint();
+    checkpoint2.type = checkpointType._id;
+
+    checkpoint2.name = '牛顿第二定律';
+    checkpoint2.save(function(err) {
+      if(err) {
+        console.log('save checkpoint err' + err);
+        throw err;
+      }
+    });
+
+    var checkpoint3 = new Checkpoint();
+    checkpoint3.name = '牛顿第三定律';
+    checkpoint3.type = checkpointType._id;
+
+    checkpoint3.save(function(err) {
+      if(err) {
+        console.log('save checkpoint err' + err);
+        throw err;
+      }
+    });
+  });
 
   router.get('/course/checkpoints', function (req, res) {
-    console.log('/user/course/checkpoints');
-    //var CheckpointType = mongoose.model('CheckpointType');
-    //var checkpointType = new CheckpointType();
-    //checkpointType.name = '默认类型';
-    //var checkpoint = new Checkpoint();
-    //checkpoint.name = '牛顿第一定律';
-    //checkpoint.type = checkpointType._id;
-    //checkpoint.save(function(err) {
-    //  if(err) {
-    //    console.log('save checkpoint err' + err);
-    //    throw err;
-    //  }
-    //});
-    //
-    //var checkpoint2 = new Checkpoint();
-    //checkpoint2.type = checkpointType._id;
-    //
-    //checkpoint2.name = '牛顿第二定律';
-    //checkpoint2.save(function(err) {
-    //  if(err) {
-    //    console.log('save checkpoint err' + err);
-    //    throw err;
-    //  }
-    //});
-    //
-    //var checkpoint3 = new Checkpoint();
-    //checkpoint3.name = '牛顿第三定律';
-    //checkpoint3.type = checkpointType._id;
-    //
-    //checkpoint3.save(function(err) {
-    //  if(err) {
-    //    console.log('save checkpoint err' + err);
-    //    throw err;
-    //  }
-    //});
-
     Checkpoint.find({}, function (err, checkpoints) {
       res.send(checkpoints);
     });
   });
 
-  router.get('/courses', function (req, res) {
-    //console.log('api/user/courses');
-    //var course = new Course();
-    //
-    //course.name = '面向对象checkpoints';
-    //var CheckpointType = mongoose.model('CheckpointType');
-    //var checkpointType = new CheckpointType();
-    //checkpointType.name = '默认类型';
-    //var checkpoint = new Checkpoint();
-    //checkpoint.name = '牛顿第一定律';
-    //checkpoint.type = checkpointType._id;
-    //checkpoint.save(function(err) {
-    //  if(err) {
-    //    console.log('save checkpoint err' + err);
-    //    throw err;
-    //  }
-    //});
-    //
-    //var checkpoint2 = new Checkpoint();
-    //checkpoint2.type = checkpointType._id;
-    //
-    //checkpoint2.name = '牛顿第二定律';
-    //checkpoint2.save(function(err) {
-    //  if(err) {
-    //    console.log('save checkpoint err' + err);
-    //    throw err;
-    //  }
-    //});
-    //
-    //var checkpoint3 = new Checkpoint();
-    //checkpoint3.name = '牛顿第三定律';
-    //checkpoint3.type = checkpointType._id;
-    //
-    //checkpoint3.save(function(err) {
-    //  if(err) {
-    //    console.log('save checkpoint err' + err);
-    //    throw err;
-    //  }
-    //});
-    //
-    //course.checkpoints.push(checkpoint);
-    //course.checkpoints.push(checkpoint2);
-    //course.checkpoints.push(checkpoint3);
-    //
-    //
-    //course.save(function (err) {
-    //  if(err) {
-    //    throw err;
-    //  }
-    //});
+  router.post('/courses', function () {
+    var course = new Course();
+    course.name = '面向对象checkpoints';
+    var CheckpointType = mongoose.model('CheckpointType');
+    var checkpointType = new CheckpointType();
+    checkpointType.name = '默认类型';
 
+    var checkpoint = new Checkpoint();
+    checkpoint.name = '牛顿第一定律';
+    checkpoint.type = checkpointType._id;
+    checkpoint.save(function(err) {
+      if(err) {
+        console.log('save checkpoint err' + err);
+        throw err;
+      }
+    });
+
+    var checkpoint2 = new Checkpoint();
+    checkpoint2.type = checkpointType._id;
+    checkpoint2.name = '牛顿第二定律';
+    checkpoint2.save(function(err) {
+      if(err) {
+        console.log('save checkpoint err' + err);
+        throw err;
+      }
+    });
+
+    var checkpoint3 = new Checkpoint();
+    checkpoint3.name = '牛顿第三定律';
+    checkpoint3.type = checkpointType._id;
+    checkpoint3.save(function(err) {
+      if(err) {
+        console.log('save checkpoint err' + err);
+        throw err;
+      }
+    });
+
+    course.checkpoints.push(checkpoint);
+    course.checkpoints.push(checkpoint2);
+    course.checkpoints.push(checkpoint3);
+
+
+    course.save(function (err) {
+      if(err) {
+        throw err;
+      }
+    });
+  });
+
+  router.get('/courses', function (req, res) {
     Course.find({}, function (err, courses) {
       res.send(courses);
     })
@@ -202,17 +185,18 @@ module.exports = function (passport) {
     );
   });
 
-  router.patch('/course/checkpoints', function (req, res) {
-    _.forEach(req.body, function (checkpointId) {
-      Checkpoint.findById(checkpointId, function (err, checkpoint) {
-        if (err) console.log('修改失败');
-        console.log(checkpoint);
-        checkpoint.checked = true;
+  router.patch('/course/checkpoints/:id', function (req, res) {
+    var checked = req.body.checked;
+    var id =req.params.id;
+    Checkpoint.findById(id, function(err, checkpoint) {
+      if (err) throw err;
+      console.log(checkpoint);
+      checkpoint.checked = checked;
 
-        checkpoint.save(function (err) {
-          console.log('修改成功');
-        });
-
+      checkpoint.save(function (err) {
+        if(err) {
+          throw err;
+        }
       });
     });
   });
