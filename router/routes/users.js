@@ -192,16 +192,6 @@ module.exports = function (passport) {
 
   });
 
-  //
-  //router.get('/courses/:id', function (req, res){
-  //  console.log(req.params.id);
-  //  Course.findById(req.params.id, function (err, course) {
-  //    if(err) console.log('获取失败');
-  //
-  //    res.send(course);
-  //  });
-  //});
-
   router.get('/courses/:id', function(req, res) {
     Course.findById(req.params.id)
       .populate('checkpoints')
