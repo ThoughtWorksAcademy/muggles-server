@@ -9,28 +9,38 @@ var LocalStrategy = require('passport-local').Strategy;
 module.exports = function (passport) {
 
   passport.use(new LocalStrategy(
-    function(username, password, done) {
+    function (username, password, done) {
       process.nextTick(function () {
-        User.findOne({'username': username}, function(err, user) {
-          if (err) { return done(err); }
-          if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
-          if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
+        User.findOne({'username': username}, function (err, user) {
+          if (err) {
+            return done(err);
+          }
+          if (!user) {
+            return done(null, false, {message: 'Unknown user ' + username});
+          }
+          if (user.password != password) {
+            return done(null, false, {message: 'Invalid password'});
+          }
           return done(null, user);
         })
       });
     }
   ));
 
-  router.post('/login', function(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
-      if (err) { return next(err) }
+  router.post('/login', function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+      if (err) {
+        return next(err)
+      }
 
       if (!user) {
         return res.status(401).send(info.message);
       }
 
-      req.logIn(user, function(err) {
-        if (err) { return next(err); }
+      req.logIn(user, function (err) {
+        if (err) {
+          return next(err);
+        }
         return res.send(user);
       });
 
@@ -83,8 +93,8 @@ module.exports = function (passport) {
     var checkpoint = new Checkpoint();
     checkpoint.name = '牛顿第一定律';
     checkpoint.type = checkpointType._id;
-    checkpoint.save(function(err) {
-      if(err) {
+    checkpoint.save(function (err) {
+      if (err) {
         console.log('save checkpoint err' + err);
         throw err;
       }
@@ -94,8 +104,8 @@ module.exports = function (passport) {
     checkpoint2.type = checkpointType._id;
 
     checkpoint2.name = '牛顿第二定律';
-    checkpoint2.save(function(err) {
-      if(err) {
+    checkpoint2.save(function (err) {
+      if (err) {
         console.log('save checkpoint err' + err);
         throw err;
       }
@@ -105,8 +115,8 @@ module.exports = function (passport) {
     checkpoint3.name = '牛顿第三定律';
     checkpoint3.type = checkpointType._id;
 
-    checkpoint3.save(function(err) {
-      if(err) {
+    checkpoint3.save(function (err) {
+      if (err) {
         console.log('save checkpoint err' + err);
         throw err;
       }
@@ -129,8 +139,8 @@ module.exports = function (passport) {
     var checkpoint = new Checkpoint();
     checkpoint.name = '牛顿第一定律';
     checkpoint.type = checkpointType._id;
-    checkpoint.save(function(err) {
-      if(err) {
+    checkpoint.save(function (err) {
+      if (err) {
         console.log('save checkpoint err' + err);
         throw err;
       }
@@ -139,8 +149,8 @@ module.exports = function (passport) {
     var checkpoint2 = new Checkpoint();
     checkpoint2.type = checkpointType._id;
     checkpoint2.name = '牛顿第二定律';
-    checkpoint2.save(function(err) {
-      if(err) {
+    checkpoint2.save(function (err) {
+      if (err) {
         console.log('save checkpoint err' + err);
         throw err;
       }
@@ -149,8 +159,8 @@ module.exports = function (passport) {
     var checkpoint3 = new Checkpoint();
     checkpoint3.name = '牛顿第三定律';
     checkpoint3.type = checkpointType._id;
-    checkpoint3.save(function(err) {
-      if(err) {
+    checkpoint3.save(function (err) {
+      if (err) {
         console.log('save checkpoint err' + err);
         throw err;
       }
@@ -162,7 +172,7 @@ module.exports = function (passport) {
 
 
     course.save(function (err) {
-      if(err) {
+      if (err) {
         throw err;
       }
     });
@@ -172,14 +182,14 @@ module.exports = function (passport) {
     Course.find({}, function (err, courses) {
       res.send(courses);
     })
-
   });
 
-  router.get('/courses/:id', function(req, res) {
+  router.get('/courses/:id', function (req, res) {
     Course.findById(req.params.id)
       .populate('checkpoints')
       .exec(
-      function (err, course){
+      function (err, course) {
+
         res.send(course);
       }
     );
@@ -187,14 +197,13 @@ module.exports = function (passport) {
 
   router.patch('/course/checkpoints/:id', function (req, res) {
     var checked = req.body.checked;
-    var id =req.params.id;
-    Checkpoint.findById(id, function(err, checkpoint) {
+    var id = req.params.id;
+    Checkpoint.findById(id, function (err, checkpoint) {
       if (err) throw err;
-      console.log(checkpoint);
-      checkpoint.checked = checked;
 
+      checkpoint.checked = checked;
       checkpoint.save(function (err) {
-        if(err) {
+        if (err) {
           throw err;
         }
       });
