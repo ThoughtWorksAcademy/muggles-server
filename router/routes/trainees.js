@@ -15,10 +15,10 @@ module.exports = function (passport) {
             return done(err);
           }
           if (!user) {
-            return done(null, false, {message: 'Unknown user ' + username});
+            return done(null, false, {message: '无法找到用户: ' + username});
           }
           if (user.password != password) {
-            return done(null, false, {message: 'Invalid password'});
+            return done(null, false, {message: '密码错误'});
           }
           return done(null, user);
         })

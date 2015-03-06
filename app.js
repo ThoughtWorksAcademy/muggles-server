@@ -26,9 +26,10 @@ app.use(cookieParser());
 
 // Passport
 var passport = require('passport');
-app.use(passport.initialize());
 var initPassport = require('./passport/init');
 initPassport(passport);
+app.use(passport.initialize());
+
 
 
 //development settings
