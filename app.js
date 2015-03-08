@@ -24,7 +24,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 
-// Passport
 var passport = require('passport');
 var initPassport = require('./passport/init');
 initPassport(passport);
@@ -32,12 +31,13 @@ app.use(passport.initialize());
 
 
 
-//development settings
 if (app.get('env') === 'development') {
   app.use(express.static(path.join(__dirname, '../muggles-client')));
   // This covers serving up the index page
   app.use(express.static(path.join(__dirname, '../muggles-client/.tmp')));
   app.use(express.static(path.join(__dirname, '../muggles-client/app')));
+  app.use(express.static(path.join(__dirname, '../muggles-client/app/views')));
+
 
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
