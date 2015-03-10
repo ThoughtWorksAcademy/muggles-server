@@ -4,7 +4,9 @@ var router = express.Router();
 var Checkpoint = mongoose.model('Checkpoint');
 var Course = mongoose.model('Course');
 var User = mongoose.model('User');
+var Station = mongoose.model('Station');
 var _ = require('lodash');
+
 module.exports = function (passport) {
 
 
@@ -191,6 +193,17 @@ module.exports = function (passport) {
         }
       });
     });
+  });
+
+  router.post('/stations', function(req, res) {
+    var station = new Station();
+    station.name = '邮电学院';
+    station.courses.push('54f71933202e9233d4b1ec23');
+    station.trainee.push('54fc67667d9bc777792006c6');
+    station.save(function() {
+      res.send('保存成功');
+    });
+
   });
 
   return router;

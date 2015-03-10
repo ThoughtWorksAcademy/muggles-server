@@ -19,11 +19,16 @@ router.post('/stations', function (req, res) {
   res.send('success');
 });
 
-router.get('/stations/courses', function (req, res) {
-  res.send('success');
+router.get('/stations/:id/courses', function (req, res) {
+  var id = req.params.id;
+  Station.findById(id)
+    .populate('courses')
+    .exec(function (err, station) {
+      res.send(station.courses);
+    });
 });
 
-router.get('/stations/students', function (req, res) {
+router.get('/stations/:id/students', function (req, res) {
   res.send('success');
 });
 
