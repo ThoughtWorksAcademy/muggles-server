@@ -19,5 +19,12 @@ router.post('/stations', function (req, res) {
   res.send('success');
 });
 
+router.get('/stations/courses', function (req, res) {
+  res.send('success');
+});
+
+router.get('/stations/students', function (req, res) {
+  res.send('success');
+});
 
 module.exports = router;
