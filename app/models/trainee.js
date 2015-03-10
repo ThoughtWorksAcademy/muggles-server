@@ -11,4 +11,4 @@ var TraineeSchema = new Schema({
   }]
 });
 
-mongoose.model('trainee', TraineeSchema);
+mongoose.model('Trainee', TraineeSchema);

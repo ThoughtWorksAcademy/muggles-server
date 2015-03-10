@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var express = require('express');
 var router = express.Router();
 var User = mongoose.model('User');
+var Trainee = mongoose.model('Trainee');
 var LocalStrategy = require('passport-local').Strategy;
 
 module.exports = function (passport) {
@@ -50,5 +51,22 @@ module.exports = function (passport) {
 
   });
 
+
+  router.post('/', function (req, res) {
+    var trainee = new Trainee();
+    trainee.username = 'main';
+    trainee.password = 'main';
+    trainee.courses.push('54f71933202e9233d4b1ec23');
+    trainee.save(function (err) {
+      res.send('保存成功');
+    });
+  });
+  //username: String,
+  //  password: String,
+  //  courses: [{
+  //  course: {type: Schema.ObjectId, ref: 'Course'},
+  //  trainer: {type: String, default: '待定义trainer'},
+  //  sponsor: {type: String, default: '待定义sponsor'}
+  //}]
   return router;
 };

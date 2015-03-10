@@ -206,5 +206,9 @@ module.exports = function (passport) {
 
   });
 
+  router.post('/', function (req, res) {
+
+  });
+
   return router;
 };
