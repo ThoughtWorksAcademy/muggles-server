@@ -3,6 +3,8 @@ var express = require('express');
 var router = express.Router();
 var User = mongoose.model('User');
 var Trainee = mongoose.model('Trainee');
+var Course = mongoose.model('Course');
+
 var LocalStrategy = require('passport-local').Strategy;
 
 module.exports = function (passport) {
@@ -57,10 +59,25 @@ module.exports = function (passport) {
     trainee.username = 'main';
     trainee.password = 'main';
     trainee.courses.push('54f71933202e9233d4b1ec23');
-    trainee.save(function (err) {
-      res.send('保存成功');
-    });
+    trainee.save();
   });
+
+
+  router.get('/:id/courses/:courseId', function (req, res) {
+    var id = req.params.id;
+    var courseId = req.params.courseId;
+    User.findById(id)
+      .populate('courses')
+      .exec(
+      function (err, user){
+        Course.findById(courseId)
+          .populate('checkpoints')
+          .exec(function (err, course) {
+            res.send(course);
+          })
+      }
+    ) ;
+   });
   //username: String,
   //  password: String,
   //  courses: [{

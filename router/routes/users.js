@@ -197,9 +197,10 @@ module.exports = function (passport) {
 
   router.post('/stations', function(req, res) {
     var station = new Station();
-    station.name = '邮电学院';
+    station.name = '欧亚学院';
     station.courses.push('54f71933202e9233d4b1ec23');
-    station.trainee.push('54fc67667d9bc777792006c6');
+    station.trainees.push('54ff9e16effd71330c5500da');
+    station.trainees.push('54ff9e1feffd71330c5500db');
     station.save(function() {
       res.send('保存成功');
     });
@@ -207,8 +208,13 @@ module.exports = function (passport) {
   });
 
   router.post('/', function (req, res) {
-
+    var user = new User();
+    user.username = 'taylor';
+    user.password = 'taylor';
+    user.courses.push('54f71933202e9233d4b1ec23');
+    user.save(function () {
+      res.send('保存成功');
+    });
   });
-
   return router;
 };

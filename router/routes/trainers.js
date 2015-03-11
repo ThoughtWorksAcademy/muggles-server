@@ -28,8 +28,14 @@ router.get('/stations/:id/courses', function (req, res) {
     });
 });
 
-router.get('/stations/:id/students', function (req, res) {
-  res.send('success');
+router.get('/stations/:id/trainees', function (req, res) {
+  var id = req.params.id;
+  Station.findById(id)
+    .populate('trainees')
+    .exec(function (err, station) {
+      console.log(station.trainees);
+      res.send(station.trainees);
+    });
 });
 
 module.exports = router;
