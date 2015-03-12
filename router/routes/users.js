@@ -9,68 +9,6 @@ var _ = require('lodash');
 
 module.exports = function (passport) {
 
-
-
-  //router.post('/login', function (req, res, next) {
-  //  console.log('enter api/user/login');
-  //  passport.authenticate('local', function (err, user, info) {
-  //    if (err) {
-  //      return next(err)
-  //    }
-  //
-  //    if (!user) {
-  //      return res.status(401).send(info.message);
-  //    }
-  //
-  //    req.logIn(user, function (err) {
-  //      if (err) {
-  //        return next(err);
-  //      }
-  //      return res.send(user);
-  //    });
-  //
-  //  })(req, res, next);
-  //});
-
-  //router.post('/signup', function(req, res) {
-  //  var username = req.body.username;
-  //  var password = req.body.password;
-  //
-  //  var massage = '';
-  //  var redirect = '';
-  //  User.findOne({ 'username' :  username }, function(err, user) {
-  //    if (err){
-  //      massage = '注册错误' + err;
-  //      console.log('Error in SignUp: '+err);
-  //      res.send(massage);
-  //    }
-  //
-  //    if (user) {
-  //      massage = '用户已存在' + username;
-  //      console.log('User already exists with username: '+username);
-  //      res.send(massage);
-  //    } else {
-  //      var newUser = new User();
-  //
-  //      newUser.username = username;
-  //      newUser.password = password;
-  //
-  //      newUser.save(function(err) {
-  //        if (err){
-  //          massage = '保存用户错误' + err;
-  //          console.log('Error in Saving user: '+err);
-  //          throw err;
-  //        }
-  //        massage = '用户注册成功';
-  //        redirect = 'views/courses.html';
-  //        result = {massage: massage, redirect: redirect};
-  //        console.log('User Registration succesful');
-  //        res.send(result);
-  //      });
-  //    }
-  //  });
-  //});
-
   router.post('/course/checkpoints', function () {
     var CheckpointType = mongoose.model('CheckpointType');
     var checkpointType = new CheckpointType();
