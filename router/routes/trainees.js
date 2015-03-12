@@ -56,10 +56,11 @@ module.exports = function (passport) {
 
   router.post('/', function (req, res) {
     var trainee = new Trainee();
-    trainee.username = 'main';
-    trainee.password = 'main';
-    trainee.courses.push('54f71933202e9233d4b1ec23');
-    trainee.save();
+    trainee.username = 'traineeA';
+    trainee.password = 'TraineeA';
+    trainee.save(function (err) {
+      res.send('trainee 保存成功');
+    });
   });
 
 

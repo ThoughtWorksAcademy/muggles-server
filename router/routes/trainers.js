@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Station = mongoose.model('Station');
+var Trainer = mongoose.model('Trainer');
 
 router.get('/stations', function (req, res) {
 
@@ -36,6 +37,15 @@ router.get('/stations/:id/trainees', function (req, res) {
       console.log(station.trainees);
       res.send(station.trainees);
     });
+});
+
+router.post('/', function (req, res) {
+  var trainer = new Trainer();
+  trainer.username = 'trainerA';
+  trainer.password = 'trainerA';
+  trainer.save(function (err) {
+    res.send('Trainer 保存成功');
+  });
 });
 
 module.exports = router;
