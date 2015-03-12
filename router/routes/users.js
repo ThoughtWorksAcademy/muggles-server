@@ -181,12 +181,14 @@ module.exports = function (passport) {
   });
 
   router.patch('/course/checkpoints/:id', function (req, res) {
+    console.log('/course/checkpoints/:id');
     var checked = req.body.checked;
     var id = req.params.id;
     Checkpoint.findById(id, function (err, checkpoint) {
       if (err) throw err;
 
       checkpoint.checked = checked;
+      console.log(checkpoint);
       checkpoint.save(function (err) {
         if (err) {
           throw err;
