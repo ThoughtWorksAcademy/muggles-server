@@ -7,7 +7,7 @@ router.post('/', function (req, res) {
   Station.create({
     name: '欧亚学院',
     courses: ['5501c04880d1550e545e14fc', '5501c08a048fe75454dd6d26', '5501c0ae0084557e54cebac5'],
-    trainees: ['5501beeec2b53a7a526008ab', '5501bf0d41c18ca5521fc573']
+    trainees: ['5501cc0126f08e37640dec23', '5501cc18e50c1275648f491c']
   }, function (err, station) {
     res.send(station);
   });

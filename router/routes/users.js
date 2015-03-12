@@ -90,9 +90,10 @@ module.exports = function (passport) {
 
   router.post('/', function (req, res) {
     var user = new User();
-    user.username = 'trainer';
-    user.password = 'trainer';
-    user.courses.push('54f71933202e9233d4b1ec23');
+    user.username = 'trainee';
+    user.password = 'trainee';
+    user.courses.push('5501c0ae0084557e54cebac5');
+    user.courses.push('5501c0c6fd7cfaa2544efb05');
     user.type = 'trainer';
     user.save(function () {
       res.send('保存成功');
