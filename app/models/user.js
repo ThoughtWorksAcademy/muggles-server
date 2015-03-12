@@ -7,10 +7,4 @@ var UserSchema = new Schema({
   courses: [{type: Schema.ObjectId, ref: 'Course'}]
 });
 
-UserSchema.statics = {
-  //load: function (options, cb) {
-  //  options.select =
-  //}
-};
-
 mongoose.model('User', UserSchema);
