@@ -63,18 +63,14 @@ module.exports = function (passport) {
   });
 
 
-  router.get('/:id/courses/:courseId', function (req, res) {
+  router.get('/:id/courses/', function (req, res) {
     var id = req.params.id;
-    var courseId = req.params.courseId;
     User.findById(id)
       .populate('courses')
       .exec(
       function (err, user){
-        Course.findById(courseId)
-          .populate('checkpoints')
-          .exec(function (err, course) {
-            res.send(course);
-          })
+        console.log(user);
+        res.send(user.courses)
       }
     ) ;
    });
