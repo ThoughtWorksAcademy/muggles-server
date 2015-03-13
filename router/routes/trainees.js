@@ -3,6 +3,8 @@ var express = require('express');
 var router = express.Router();
 var User = mongoose.model('User');
 var Trainee = mongoose.model('Trainee');
+var Course = mongoose.model('Course');
+
 var LocalStrategy = require('passport-local').Strategy;
 
 module.exports = function (passport) {
@@ -11,7 +13,7 @@ module.exports = function (passport) {
     function (username, password, done) {
       process.nextTick(function () {
 
-        User.findOne({'username': username}, function (err, user) {
+        Trainee.findOne({'username': username}, function (err, user) {
           if (err) {
             return done(err);
           }
@@ -52,21 +54,50 @@ module.exports = function (passport) {
   });
 
 
-  router.post('/', function (req, res) {
+  router.post('/A', function (req, res) {
     var trainee = new Trainee();
-    trainee.username = 'main';
-    trainee.password = 'main';
-    trainee.courses.push('54f71933202e9233d4b1ec23');
+    trainee.username = 'traineeA';
+    trainee.password = 'TraineeA';
     trainee.save(function (err) {
-      res.send('保存成功');
+      res.send('trainee 保存成功');
     });
   });
-  //username: String,
-  //  password: String,
-  //  courses: [{
-  //  course: {type: Schema.ObjectId, ref: 'Course'},
-  //  trainer: {type: String, default: '待定义trainer'},
-  //  sponsor: {type: String, default: '待定义sponsor'}
-  //}]
+
+  router.post('/', function (req, res) {
+    var trainee = new Trainee();
+    trainee.username = 'traineeB';
+    trainee.password = 'traineeB';
+    Course.find({}, function (err, courses) {
+
+      for (var i = 0; i < courses.length; i++) {
+        trainee.courses.push({
+          course: courses[i]._id,
+          trainer: '550240fe573a3bf20a81ac66',
+          sponsor: '5502402eb3e142a909f1f9fd',
+          result: []
+        });
+      }
+
+      trainee.save(function (err, trainee) {
+        res.send('trainee 保存|成功');
+      });
+    });
+  });
+
+  router.get('/:id/courses/', function (req, res) {
+    //var id = req.params.id;
+    //Trainee.findById(id)
+    //  .populate('courses')
+    //  .exec(
+    //  function (err, trainee) {
+    //    console.log(trainee);
+    //    res.send(trainee.courses)
+    //  }
+    //);
+
+    Course.find({}, function (err, courses) {
+      res.send(courses);
+    })
+  });
   return router;
 };

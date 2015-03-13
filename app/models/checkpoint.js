@@ -2,10 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Checkpoint = new Schema({
-  type: String,
-  content: String,
-  state: Boolean,
-  isVisible: Boolean
+
+  name: String,
+  type: {type: Schema.ObjectId, ref: 'CheckpointType'}
 
 });
 

@@ -6,9 +6,11 @@ var TraineeSchema = new Schema({
   password: String,
   courses: [{
     course: {type: Schema.ObjectId, ref: 'Course'},
-    trainer: {type: String, default: '待定义trainer'},
-    sponsor: {type: String, default: '待定义sponsor'}
-  }]
+    trainer: {type: Schema.ObjectId, ref: 'Trainer'},
+    sponsor: {type: Schema.ObjectId, ref: 'Trainee'},
+    result: [{checkpointId: String, traineeChecked: Boolean, trainerChecked: Boolean}]
+  }],
+  station: {type: String, default: '某一讲课地点：欧亚'}
 });
 
 mongoose.model('Trainee', TraineeSchema);

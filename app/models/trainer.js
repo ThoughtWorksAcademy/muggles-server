@@ -4,7 +4,13 @@ var Schema = mongoose.Schema;
 var TrainerSchema = new Schema({
   username: String,
   password: String,
-  station: {type: String, default: '某一讲课地点：欧亚'}
+  //stations: [{
+  //  station: {type: Schema.ObjectId, ref: 'Station'},
+  //  courses: [{type: Schema.ObjectId, ref: 'Course'}],
+  //  trainees: [{type: Schema.ObjectId, ref: 'Trainee'}]
+  //}]
+  stations : [{type: Schema.ObjectId, ref: 'Station'}]
+
 });
 
-mongoose.model('trainer', TrainerSchema);
+mongoose.model('Trainer', TrainerSchema);
