@@ -66,14 +66,14 @@ module.exports = function (passport) {
   router.post('/', function (req, res) {
     var trainee = new Trainee();
     trainee.username = 'trainee';
-    trainee.password = 'Trainee';
+    trainee.password = 'trainee';
     Course.find({}, function (err, courses) {
 
       for (var i = 0; i < courses.length; i++) {
         trainee.courses.push({
           course: courses[i]._id,
-          trainer: '5501e72a6fbe17508abd8432',
-          sponsor: '5501e7b24ae753958b2d6656',
+          trainer: '550240fe573a3bf20a81ac66',
+          sponsor: '5502402eb3e142a909f1f9fd',
           result: []
         });
       }

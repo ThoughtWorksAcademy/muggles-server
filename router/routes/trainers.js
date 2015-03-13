@@ -39,7 +39,7 @@ router.get('/stations/:id/trainees', function (req, res) {
     });
 });
 
-router.post('/', function (req, res) {
+router.post('/A', function (req, res) {
   var trainer = new Trainer();
   trainer.username = 'trainerA';
   trainer.password = 'trainerA';
