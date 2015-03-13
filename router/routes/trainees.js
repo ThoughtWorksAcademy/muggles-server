@@ -13,7 +13,7 @@ module.exports = function (passport) {
     function (username, password, done) {
       process.nextTick(function () {
 
-        User.findOne({'username': username}, function (err, user) {
+        Trainee.findOne({'username': username}, function (err, user) {
           if (err) {
             return done(err);
           }
@@ -54,7 +54,7 @@ module.exports = function (passport) {
   });
 
 
-  router.post('/', function (req, res) {
+  router.post('/A', function (req, res) {
     var trainee = new Trainee();
     trainee.username = 'traineeA';
     trainee.password = 'TraineeA';
@@ -63,17 +63,37 @@ module.exports = function (passport) {
     });
   });
 
+  router.post('/', function (req, res) {
+    var trainee = new Trainee();
+    trainee.username = 'trainee';
+    trainee.password = 'Trainee';
+    Course.find({}, function (err, courses) {
+
+      for (var i = 0; i < courses.length; i++) {
+        trainee.courses.push({
+          course: courses[i]._id,
+          trainer: '5501e72a6fbe17508abd8432',
+          sponsor: '5501e7b24ae753958b2d6656',
+          result: []
+        });
+      }
+
+      trainee.save(function (err, trainee) {
+        res.send('trainee 保存|成功');
+      });
+    });
+  });
 
   router.get('/:id/courses/', function (req, res) {
     var id = req.params.id;
     User.findById(id)
       .populate('courses')
       .exec(
-      function (err, user){
+      function (err, user) {
         console.log(user);
         res.send(user.courses)
       }
-    ) ;
-   });
+    );
+  });
   return router;
 };
