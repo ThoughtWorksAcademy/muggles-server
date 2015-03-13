@@ -2,9 +2,11 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Checkpoint = new Schema({
-  name: {type: Schema.ObjectId, ref: 'CheckpointStore' },
-  type: {type: Schema.ObjectId, ref: 'CheckpointStore'},
-  checked: {type: Boolean, default: false},
-  disable: {type: Boolean, default: false}
+  type: String,
+  content: String,
+  state: Boolean,
+  isVisible: Boolean
+
 });
+
 mongoose.model('Checkpoint', Checkpoint);

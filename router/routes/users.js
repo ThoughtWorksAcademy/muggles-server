@@ -12,7 +12,6 @@ module.exports = function (passport) {
 
 
   //router.post('/login', function (req, res, next) {
-  //  console.log('enter api/user/login');
   //  passport.authenticate('local', function (err, user, info) {
   //    if (err) {
   //      return next(err)
@@ -195,20 +194,109 @@ module.exports = function (passport) {
     });
   });
 
-  router.post('/stations', function(req, res) {
+  router.post('/stations', function (req, res) {
     var station = new Station();
     station.name = '邮电学院';
     station.courses.push('54f71933202e9233d4b1ec23');
     station.trainee.push('54fc67667d9bc777792006c6');
-    station.save(function() {
+    station.save(function () {
       res.send('保存成功');
     });
 
   });
 
-  router.post('/', function (req, res) {
+
+  var Course = mongoose.model('Course');
+  var Participate = mongoose.model('Participate');
+  var Location = mongoose.model('Location');
+
+
+  router.post('/checkpoints', function (req, res) {
+
+
+    var cp1 = new Checkpoint(),
+      cp2 = new Checkpoint(),
+      cp3 = new Checkpoint();
+
+    cp1.type = 'h001';
+    cp1.content = '函数不可以超过三行';
+    cp1.state = true;
+    cp1.isVisible = true;
+    cp1.save();
+
+    cp2.type = 'h001';
+    cp2.content = '不能使用递归';
+    cp2.state = true;
+    cp2.isVisible = true;
+    cp2.save();
+
+    cp3.type = 'h001';
+    cp3.content = '掌握Express的promise';
+    cp3.state = true;
+    cp3.isVisible = true;
+    cp3.save();
+
+
+    res.send('保存成功');
 
   });
+
+  router.post('/mycourses', function (req, res) {
+
+    var course = new Course();
+    course.name = 'JS进阶学习';
+    Checkpoint.find({}, function (err, checkpoints) {
+        _.forEach(checkpoints, function (checkpoint) {
+          console.log(checkpoint);
+          course.checkpoints.push(checkpoint._id);
+        });
+        course.save();
+      }
+    );
+
+    res.send('保存成功');
+
+  });
+
+  router.post('/myparticipate', function (req, res) {
+
+    var participate = new Participate();
+    participate.name = 'Jacob';
+    Course.find({}, function (err, courses) {
+        _.forEach(courses, function (course) {
+
+          var checkpointIds = [];
+          _.forEach(course.checkpoints, function (checkpoint)
+          {
+
+            checkpointIds.push({
+              checkpoints: checkpoint._id,
+              ans: '0'
+            });
+          });
+
+          participate.courses.push({
+            course: course._id,
+            result : checkpointIds
+          });
+
+        });
+        participate.save();
+      }
+    );
+
+    res.send('保存成功');
+
+  });
+
+  router.get('/participate', function (req, res) {
+    Participate.find({}).populate('courses').exec(
+      function (err, participate) {
+        res.send(participate);
+      }
+    );
+  })
+
 
   return router;
 };
