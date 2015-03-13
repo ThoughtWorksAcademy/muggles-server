@@ -65,8 +65,8 @@ module.exports = function (passport) {
 
   router.post('/', function (req, res) {
     var trainee = new Trainee();
-    trainee.username = 'trainee';
-    trainee.password = 'trainee';
+    trainee.username = 'traineeB';
+    trainee.password = 'traineeB';
     Course.find({}, function (err, courses) {
 
       for (var i = 0; i < courses.length; i++) {

@@ -92,5 +92,20 @@ module.exports = function (passport) {
   });
 
 
+  router.post('/', function (req, res) {
+    var trainer = new Trainer();
+    trainer.username = 'trainer';
+    trainer.password = 'trainer';
+    Station.find({}, function (err, stations) {
+      for(var i = 0; i < stations.length; i++) {
+        trainer.stations.push(stations[i]._id);
+      }
+
+      trainer.save(function (err) {
+        res.send('Trainer 保存成功');
+      });
+    });
+
+  });
   return router;
 };
