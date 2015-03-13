@@ -85,15 +85,19 @@ module.exports = function (passport) {
   });
 
   router.get('/:id/courses/', function (req, res) {
-    var id = req.params.id;
-    User.findById(id)
-      .populate('courses')
-      .exec(
-      function (err, user) {
-        console.log(user);
-        res.send(user.courses)
-      }
-    );
+    //var id = req.params.id;
+    //Trainee.findById(id)
+    //  .populate('courses')
+    //  .exec(
+    //  function (err, trainee) {
+    //    console.log(trainee);
+    //    res.send(trainee.courses)
+    //  }
+    //);
+
+    Course.find({}, function (err, courses) {
+      res.send(courses);
+    })
   });
   return router;
 };
