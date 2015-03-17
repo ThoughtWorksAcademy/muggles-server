@@ -3,11 +3,12 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Station = mongoose.model('Station');
 var Trainer = mongoose.model('Trainer');
+var Trainee = mongoose.model('Trainee');
 var LocalStrategy = require('passport-local').Strategy;
 
 module.exports = function (passport) {
 
-  passport.use(new LocalStrategy(
+  passport.use('trainer', new LocalStrategy(
     function (username, password, done) {
       process.nextTick(function () {
 
@@ -28,7 +29,7 @@ module.exports = function (passport) {
   ));
 
   router.post('/login', function (req, res, next) {
-    passport.authenticate('local', function (err, user, info) {
+    passport.authenticate('trainer', function (err, user, info) {
       if (err) {
         return next(err)
       }

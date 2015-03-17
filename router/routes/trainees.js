@@ -4,16 +4,17 @@ var router = express.Router();
 var User = mongoose.model('User');
 var Trainee = mongoose.model('Trainee');
 var Course = mongoose.model('Course');
-
 var LocalStrategy = require('passport-local').Strategy;
 
 module.exports = function (passport) {
 
-  passport.use(new LocalStrategy(
+  passport.use('trainee', new LocalStrategy(
     function (username, password, done) {
       process.nextTick(function () {
 
         Trainee.findOne({'username': username}, function (err, user) {
+          console.log(user);
+
           if (err) {
             return done(err);
           }
@@ -30,7 +31,7 @@ module.exports = function (passport) {
   ));
 
   router.post('/login', function (req, res, next) {
-    passport.authenticate('local', function (err, user, info) {
+    passport.authenticate('trainee', function (err, user, info) {
       if (err) {
         return next(err)
       }
@@ -65,15 +66,15 @@ module.exports = function (passport) {
 
   router.post('/', function (req, res) {
     var trainee = new Trainee();
-    trainee.username = 'traineeB';
-    trainee.password = 'traineeB';
+    trainee.username = 'trainee';
+    trainee.password = 'trainee';
     Course.find({}, function (err, courses) {
 
       for (var i = 0; i < courses.length; i++) {
         trainee.courses.push({
           course: courses[i]._id,
           trainer: '550240fe573a3bf20a81ac66',
-          sponsor: '5502402eb3e142a909f1f9fd',
+          sponsor: '5507c34d163d7e1da77dddd9',
           result: []
         });
       }
