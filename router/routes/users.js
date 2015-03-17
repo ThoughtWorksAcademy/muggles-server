@@ -4,6 +4,7 @@ var router = express.Router();
 var Checkpoint = mongoose.model('Checkpoint');
 var Course = mongoose.model('Course');
 var User = mongoose.model('User');
+var Trainee = mongoose.model('Trainee');
 var Station = mongoose.model('Station');
 var _ = require('lodash');
 
@@ -58,6 +59,18 @@ module.exports = function (passport) {
     Course.find({}, function (err, courses) {
       res.send(courses);
     })
+  });
+
+
+  router.get('/:id/courses', function (req, res) {
+    console.log(req.params.id);
+    Trainee.findById(req.params.id)
+      .populate('courses.course')
+      .populate('courses.trainer', 'username')
+      .populate('courses.sponsor', 'username')
+      .exec(function (err, trainee) {
+        res.send(trainee.courses);
+      });
   });
 
   router.get('/courses/:id', function (req, res) {

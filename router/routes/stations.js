@@ -25,4 +25,11 @@ router.post('/', function (req, res) {
   });
 });
 
+router.post('/id', function (req, res) {
+  var id = req.params.id;
+  Station.findById(id, function (err, station) {
+      station.courses = [];
+  })
+});
+
 module.exports = router;

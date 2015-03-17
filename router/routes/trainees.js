@@ -100,5 +100,10 @@ module.exports = function (passport) {
       res.send(courses);
     })
   });
+
+  router.patch('course/checkpoints/', function () {
+
+  });
+
   return router;
 };
