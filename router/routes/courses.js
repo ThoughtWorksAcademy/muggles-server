@@ -8,7 +8,7 @@ var Checkpoint = mongoose.model('Checkpoint');
 
 router.post('/', function (req, res) {
   var course = new Course();
-  course.name = '物理';
+  course.name = '面向对象';
 
   Checkpoint.find({}, function (err, checkpoints) {
     for(var i = 0; i < checkpoints.length; i++) {

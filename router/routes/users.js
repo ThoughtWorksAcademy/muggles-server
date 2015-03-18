@@ -84,18 +84,20 @@ module.exports = function (passport) {
     );
   });
 
-  router.get('/:userId/courses/:id', function (req, res) {
-    var id = req.params.id;
+  router.get('/:userId/courses/:courseId', function (req, res) {
+    var courseId = req.params.courseId;
     var userId = req.params.userId;
-
     Trainee.findById(userId)
       .populate('courses.course')
       .exec(function (err, trainee) {
-        var course = _.find(trainee.courses, function (courseItem) {
-          return courseItem.course._id == id;
+       var courseItem =  _.find(trainee.courses, function (course) {
+         return course.course._id == courseId;
+       });
+
+        Course.populate(courseItem.course,'checkpoints', function (err, course) {
+          res.send(courseItem);
         });
 
-        res.send(course);
       });
   });
 
@@ -116,6 +118,47 @@ module.exports = function (passport) {
     });
   });
 
+  router.patch('/:userId/course/:courseId/checkpoints/:id', function (req, res) {
+    console.log('/:userId/course/checkpoints/:id');
+    var userId = req.params.userId;
+    var checked = req.body.checked;
+    var id = req.params.id;
+    var courseId = req.params.courseId;
+
+    console.log(id);
+
+    Trainee.findById(userId)
+      .populate('courses.course')
+      .populate('courses.trainer', 'username')
+      .populate('courses.sponsor', 'username')
+      .exec(function (err, trainee) {
+        _.forEach(trainee.courses, function (course, index) {
+          console.log(course);
+          console.log(index);
+
+          if(course.course._id == courseId) {
+            handleCheckpoints(trainee, index, id, checked);
+          }
+        })
+      });
+
+    function handleCheckpoints(trainee, courseIndex, checkpointId, traineeChecked) {
+      var course = trainee.courses[courseIndex];
+      var checkpointIndex = _.findIndex(course.result, {id: checkpointId} );
+
+      if(checkpointIndex !== -1) {
+        course.result[checkpointIndex].traineeChecked = traineeChecked;
+      }else {
+        course.result.push({checkpointId: checkpointId, traineeChecked: traineeChecked, trainerChecked: false})
+      }
+
+      trainee.courses[courseIndex] = course;
+      trainee.save(function (err, trainee) {
+        return trainee;
+      });
+      console.log('handleCheckpoint');
+    }
+  });
 
 router.post('/', function (req, res) {
     var user = new User();
