@@ -84,6 +84,21 @@ module.exports = function (passport) {
     );
   });
 
+  router.get('/:userId/courses/:id', function (req, res) {
+    var id = req.params.id;
+    var userId = req.params.userId;
+
+    Trainee.findById(userId)
+      .populate('courses.course')
+      .exec(function (err, trainee) {
+        var course = _.find(trainee.courses, function (courseItem) {
+          return courseItem.course._id == id;
+        });
+
+        res.send(course);
+      });
+  });
+
   router.patch('/course/checkpoints/:id', function (req, res) {
     console.log('/course/checkpoints/:id');
     var checked = req.body.checked;
