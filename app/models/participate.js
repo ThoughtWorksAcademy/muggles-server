@@ -14,7 +14,8 @@ var ParticipateSchema = new Schema({
     role: String,
     location: [{
       type: Schema.ObjectId,
-      ref: 'Location'}],
+      ref: 'Location'
+    }],
 
     courses: [{
       course: [{

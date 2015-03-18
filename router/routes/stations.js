@@ -10,12 +10,12 @@ router.post('/', function (req, res) {
   station.name = '邮电大学';
 
   Course.find({}, function (err, courses) {
-    for(var i = 0; i < courses.length; i++) {
+    for (var i = 0; i < courses.length; i++) {
       station.courses.push(courses[i]._id);
     }
 
-    Trainee.find({}, function(err, trainees) {
-      for(var i = 0; i < trainees.length; i++) {
+    Trainee.find({}, function (err, trainees) {
+      for (var i = 0; i < trainees.length; i++) {
         station.trainees.push(trainees[i]._id);
       }
       station.save(function (err, station) {
@@ -28,7 +28,7 @@ router.post('/', function (req, res) {
 router.post('/id', function (req, res) {
   var id = req.params.id;
   Station.findById(id, function (err, station) {
-      station.courses = [];
+    station.courses = [];
   })
 });
 

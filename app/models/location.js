@@ -10,7 +10,8 @@ var LocationSchema = new Schema({
   name: String,
   courses: [{
     type: Schema.ObjectId,
-    ref: 'Course'}]
+    ref: 'Course'
+  }]
 
 });
 

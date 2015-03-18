@@ -9,7 +9,7 @@ var TrainerSchema = new Schema({
   //  courses: [{type: Schema.ObjectId, ref: 'Course'}],
   //  trainees: [{type: Schema.ObjectId, ref: 'Trainee'}]
   //}]
-  stations : [{type: Schema.ObjectId, ref: 'Station'}]
+  stations: [{type: Schema.ObjectId, ref: 'Station'}]
 
 });
 

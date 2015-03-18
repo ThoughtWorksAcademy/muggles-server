@@ -54,7 +54,6 @@ module.exports = function (passport) {
   });
 
 
-
   router.get('/courses', function (req, res) {
     Course.find({}, function (err, courses) {
       res.send(courses);
@@ -90,11 +89,11 @@ module.exports = function (passport) {
     Trainee.findById(userId)
       .populate('courses.course')
       .exec(function (err, trainee) {
-       var courseItem =  _.find(trainee.courses, function (course) {
-         return course.course._id == courseId;
-       });
+        var courseItem = _.find(trainee.courses, function (course) {
+          return course.course._id == courseId;
+        });
 
-        Course.populate(courseItem.course,'checkpoints', function (err, course) {
+        Course.populate(courseItem.course, 'checkpoints', function (err, course) {
           res.send(courseItem);
         });
 
@@ -136,7 +135,7 @@ module.exports = function (passport) {
           console.log(course);
           console.log(index);
 
-          if(course.course._id == courseId) {
+          if (course.course._id == courseId) {
             handleCheckpoints(trainee, index, id, checked);
           }
         })
@@ -144,11 +143,11 @@ module.exports = function (passport) {
 
     function handleCheckpoints(trainee, courseIndex, checkpointId, traineeChecked) {
       var course = trainee.courses[courseIndex];
-      var checkpointIndex = _.findIndex(course.result, {id: checkpointId} );
+      var checkpointIndex = _.findIndex(course.result, {id: checkpointId});
 
-      if(checkpointIndex !== -1) {
+      if (checkpointIndex !== -1) {
         course.result[checkpointIndex].traineeChecked = traineeChecked;
-      }else {
+      } else {
         course.result.push({checkpointId: checkpointId, traineeChecked: traineeChecked, trainerChecked: false})
       }
 
@@ -160,7 +159,7 @@ module.exports = function (passport) {
     }
   });
 
-router.post('/', function (req, res) {
+  router.post('/', function (req, res) {
     var user = new User();
     user.username = 'trainee';
     user.password = 'trainee';

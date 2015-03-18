@@ -11,7 +11,7 @@ router.post('/', function (req, res) {
   course.name = '面向对象';
 
   Checkpoint.find({}, function (err, checkpoints) {
-    for(var i = 0; i < checkpoints.length; i++) {
+    for (var i = 0; i < checkpoints.length; i++) {
       console.log(checkpoints[i]);
       course.checkpoints.push(checkpoints[i]._id);
     }
@@ -25,7 +25,6 @@ router.post('/', function (req, res) {
 
     res.send('course 存储成功');
   });
-
 
 
 });
