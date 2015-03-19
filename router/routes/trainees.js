@@ -50,8 +50,10 @@ module.exports = function (passport) {
     })(req, res, next);
   });
 
-  router.get('/courses', function (req, res) {
-
+  router.get('/', function (req, res) {
+      Trainee.find({}, function (err, trainees) {
+          res.send(trainees);
+      });
   });
 
 

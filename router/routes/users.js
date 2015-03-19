@@ -124,17 +124,12 @@ module.exports = function (passport) {
     var id = req.params.id;
     var courseId = req.params.courseId;
 
-    console.log(id);
-
     Trainee.findById(userId)
       .populate('courses.course')
       .populate('courses.trainer', 'username')
       .populate('courses.sponsor', 'username')
       .exec(function (err, trainee) {
         _.forEach(trainee.courses, function (course, index) {
-          console.log(course);
-          console.log(index);
-
           if (course.course._id == courseId) {
             handleCheckpoints(trainee, index, id, checked);
           }
@@ -143,7 +138,7 @@ module.exports = function (passport) {
 
     function handleCheckpoints(trainee, courseIndex, checkpointId, traineeChecked) {
       var course = trainee.courses[courseIndex];
-      var checkpointIndex = _.findIndex(course.result, {id: checkpointId});
+      var checkpointIndex = _.findIndex(course.result, {checkpointId: checkpointId});
 
       if (checkpointIndex !== -1) {
         course.result[checkpointIndex].traineeChecked = traineeChecked;
@@ -155,7 +150,6 @@ module.exports = function (passport) {
       trainee.save(function (err, trainee) {
         return trainee;
       });
-      console.log('handleCheckpoint');
     }
   });
 
@@ -170,5 +164,18 @@ module.exports = function (passport) {
       res.send('保存成功');
     });
   });
+
+  router.patch('/:id', function (req, res) {
+    var id = req.params.id;
+    Trainee.findById(id, function (err, trainee) {
+      _.forEach(trainee.courses, function (course) {
+        course.result = [];
+      });
+      trainee.save();
+
+      res.send(trainee);
+    })
+  });
+
   return router;
 };

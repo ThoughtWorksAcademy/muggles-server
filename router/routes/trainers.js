@@ -5,7 +5,7 @@ var Station = mongoose.model('Station');
 var Trainer = mongoose.model('Trainer');
 var Trainee = mongoose.model('Trainee');
 var LocalStrategy = require('passport-local').Strategy;
-
+var _ = require('lodash');
 module.exports = function (passport) {
 
   passport.use('trainer', new LocalStrategy(
@@ -109,5 +109,42 @@ module.exports = function (passport) {
     });
 
   });
+
+
+  router.patch('/users/:userId/course/:courseId/checkpoints/:id', function (req, res) {
+    var userId = req.params.userId;
+    var checked = req.body.checked;
+    var id = req.params.id;
+    var courseId = req.params.courseId;
+
+    Trainee.findById(userId)
+      .populate('courses.course')
+      .populate('courses.trainer', 'username')
+      .populate('courses.sponsor', 'username')
+      .exec(function (err, trainee) {
+        _.forEach(trainee.courses, function (course, index) {
+          if (course.course._id == courseId) {
+            handleCheckpoints(trainee, index, id, checked);
+          }
+        })
+      });
+
+    function handleCheckpoints(trainee, courseIndex, checkpointId, trainerChecked) {
+      var course = trainee.courses[courseIndex];
+      var checkpointIndex = _.findIndex(course.result, {checkpointId: checkpointId});
+
+      if (checkpointIndex !== -1) {
+        course.result[checkpointIndex].trainerChecked = trainerChecked;
+      } else {
+        course.result.push({checkpointId: checkpointId, traineeChecked: false, trainerChecked: trainerChecked})
+      }
+
+      trainee.courses[courseIndex] = course;
+      trainee.save(function (err, trainee) {
+        return trainee;
+      });
+    }
+  });
+
   return router;
 };
