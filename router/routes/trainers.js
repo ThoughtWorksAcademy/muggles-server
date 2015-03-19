@@ -80,21 +80,8 @@ module.exports = function (passport) {
     Station.findById(id)
       .populate('trainees')
       .exec(function (err, station) {
-        console.log(station.trainees);
         res.send(station.trainees);
       });
-  });
-
-  router.get('/userId/stations/:stationId/trainees', function (req, res) {
-    var stationId = req.params.stationId;
-    var userId = req.params.userId;
-
-    Trainer.findById(userId)
-      .populate('stations')
-      .exec(function (err, trainer) {
-        res.send(trainer);
-      });
-
   });
 
   router.post('/A', function (req, res) {
@@ -109,8 +96,8 @@ module.exports = function (passport) {
 
   router.post('/', function (req, res) {
     var trainer = new Trainer();
-    trainer.username = 'lisi';
-    trainer.password = 'lisi';
+    trainer.username = 'test';
+    trainer.password = 'test';
     Station.find({}, function (err, stations) {
       for (var i = 0; i < stations.length; i++) {
         trainer.stations.push(stations[i]._id);

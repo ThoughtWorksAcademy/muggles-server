@@ -7,7 +7,7 @@ var Trainee = mongoose.model('Trainee');
 
 router.post('/', function (req, res) {
   var station = new Station();
-  station.name = '邮电大学';
+  station.name = '西安理工大学';
 
   Course.find({}, function (err, courses) {
     for (var i = 0; i < courses.length; i++) {
