@@ -51,9 +51,9 @@ module.exports = function (passport) {
   });
 
   router.get('/', function (req, res) {
-      Trainee.find({}, function (err, trainees) {
-          res.send(trainees);
-      });
+    Trainee.find({}, function (err, trainees) {
+      res.send(trainees);
+    });
   });
 
 
