@@ -48,11 +48,13 @@ module.exports = function (passport) {
     })(req, res, next);
   });
 
-  router.get('/stations', function (req, res) {
-
-    Station.find({}, function (err, stations) {
-      res.send(stations);
-    });
+  router.get('/:userId/stations', function (req, res) {
+    var userId = req.params.userId;
+    Trainer.findById(userId)
+      .populate('stations')
+      .exec(function (err, trainer) {
+        res.send(trainer.stations);
+      });
   });
 
   router.post('/stations', function (req, res) {
@@ -83,6 +85,18 @@ module.exports = function (passport) {
       });
   });
 
+  router.get('/userId/stations/:stationId/trainees', function (req, res) {
+    var stationId = req.params.stationId;
+    var userId = req.params.userId;
+
+    Trainer.findById(userId)
+      .populate('stations')
+      .exec(function (err, trainer) {
+        res.send(trainer);
+      });
+
+  });
+
   router.post('/A', function (req, res) {
     var trainer = new Trainer();
     trainer.username = 'trainerA';
@@ -95,8 +109,8 @@ module.exports = function (passport) {
 
   router.post('/', function (req, res) {
     var trainer = new Trainer();
-    trainer.username = 'trainer';
-    trainer.password = 'trainer';
+    trainer.username = 'lisi';
+    trainer.password = 'lisi';
     Station.find({}, function (err, stations) {
       for (var i = 0; i < stations.length; i++) {
         trainer.stations.push(stations[i]._id);
