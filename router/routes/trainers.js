@@ -135,12 +135,19 @@ module.exports = function (passport) {
 
       if (checkpointIndex !== -1) {
         course.result[checkpointIndex].trainerChecked = trainerChecked;
+
+        if(trainerChecked && course.result[checkpointIndex].traineeChecked) {
+          course.result[checkpointIndex].display = true;
+          console.log(course.result[checkpointIndex]);
+        }
+
       } else {
-        course.result.push({checkpointId: checkpointId, traineeChecked: false, trainerChecked: trainerChecked})
+        course.result.push({checkpointId: checkpointId, traineeChecked: false, trainerChecked: trainerChecked, display: false})
       }
 
       trainee.courses[courseIndex] = course;
       trainee.save(function (err, trainee) {
+        console.log(trainee.courses[courseIndex]);
         return trainee;
       });
     }

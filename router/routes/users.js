@@ -142,6 +142,12 @@ module.exports = function (passport) {
 
       if (checkpointIndex !== -1) {
         course.result[checkpointIndex].traineeChecked = traineeChecked;
+        if(traineeChecked && course.result[checkpointIndex].trainerChecked) {
+          course.result[checkpointIndex].display = true;
+          console.log(course.result[checkpointIndex].display + '-------');
+
+        }
+
       } else {
         course.result.push({checkpointId: checkpointId, traineeChecked: traineeChecked, trainerChecked: false})
       }
