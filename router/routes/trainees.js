@@ -86,21 +86,16 @@ module.exports = function (passport) {
   });
 
   router.get('/:id/courses/', function (req, res) {
-    //var id = req.params.id;
-    //Trainee.findById(id)
-    //  .populate('courses')
-    //  .exec(
-    //  function (err, trainee) {
-    //    console.log(trainee);
-    //    res.send(trainee.courses)
-    //  }
-    //);
 
-    Course.find({}, function (err, courses) {
-      res.send(courses);
-    })
+    Trainee.findById(req.params.id)
+      .populate('courses.course')
+      .populate('courses.trainer', 'username')
+      .populate('courses.sponsor', 'username')
+      .exec(function (err, trainee) {
+        res.send(trainee.courses);
+      });
   });
-
+ 
   router.patch('course/checkpoints/', function () {
 
   });
