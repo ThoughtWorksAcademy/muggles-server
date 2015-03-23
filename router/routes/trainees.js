@@ -13,8 +13,6 @@ module.exports = function (passport) {
       process.nextTick(function () {
 
         Trainee.findOne({'username': username}, function (err, user) {
-          console.log(user);
-
           if (err) {
             return done(err);
           }

@@ -10,8 +10,6 @@ var router = express.Router();
 
 var Checkpoint = mongoose.model('Checkpoint');
 var Course = mongoose.model('Course');
-var Participate = mongoose.model('Participate');
-var Location = mongoose.model('Location');
 
 var _ = require('lodash');
 

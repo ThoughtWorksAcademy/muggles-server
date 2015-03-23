@@ -6,6 +6,7 @@ var Course = mongoose.model('Course');
 var User = mongoose.model('User');
 var Trainee = mongoose.model('Trainee');
 var Station = mongoose.model('Station');
+var CheckpointType = mongoose.model('CheckpointType');
 var _ = require('lodash');
 
 module.exports = function (passport) {
@@ -94,9 +95,10 @@ module.exports = function (passport) {
         });
 
         Course.populate(courseItem.course, 'checkpoints', function (err, course) {
-          res.send(courseItem);
+            CheckpointType.populate(course.checkpoints, 'type', function (err, data) {
+              res.send(courseItem);
+            });
         });
-
       });
   });
 
