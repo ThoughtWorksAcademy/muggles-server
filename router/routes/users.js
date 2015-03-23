@@ -142,11 +142,16 @@ module.exports = function (passport) {
 
       if (checkpointIndex !== -1) {
         course.result[checkpointIndex].traineeChecked = traineeChecked;
-        course.result[checkpointIndex].display = (traineeChecked && course.result[checkpointIndex].trainerChecked);
-        console.log(course.result[checkpointIndex].display);
+        var result = course.result[checkpointIndex];
+        course.result[checkpointIndex].display = result.trainerChecked && result.traineeChecked;
 
       } else {
-        course.result.push({checkpointId: checkpointId, traineeChecked: traineeChecked, trainerChecked: false, display: false})
+        course.result.push({
+          checkpointId: checkpointId,
+          traineeChecked: traineeChecked,
+          trainerChecked: false,
+          display: false
+        })
       }
 
       trainee.courses[courseIndex] = course;
