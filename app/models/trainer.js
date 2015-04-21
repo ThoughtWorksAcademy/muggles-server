@@ -5,7 +5,6 @@ var TrainerSchema = new Schema({
   username: String,
   password: String,
   stations: [{type: Schema.ObjectId, ref: 'Station'}]
-
 });
 
 mongoose.model('Trainer', TrainerSchema);
