@@ -29,6 +29,16 @@ var initPassport = require('./passport/init');
 initPassport(passport);
 app.use(passport.initialize());
 
+// routes
+var router = require('./router');
+router(app, passport);
+
+// catch 404 and forward to error handler
+//app.use(function(req, res, next) {
+//  var err = new Error('Not Found');
+//  err.status = 404;
+//  next(err);
+//});
 
 if (app.get('env') === 'development') {
   app.use(express.static(path.join(__dirname, '../muggles-client')));
@@ -40,7 +50,7 @@ if (app.get('env') === 'development') {
 
   app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    res.send({
       message: err.message,
       error: err
     });
@@ -52,7 +62,7 @@ if (app.get('env') === 'production') {
 
   app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    res.send({
       message: err.message,
       error: {}
     });
@@ -60,6 +70,4 @@ if (app.get('env') === 'production') {
 }
 console.log('Express app started on port ' + port);
 
-// routes
-var router = require('./router')(app, passport);
 module.exports = app;
