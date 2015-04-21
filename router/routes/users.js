@@ -95,9 +95,9 @@ module.exports = function (passport) {
         });
 
         Course.populate(courseItem.course, 'checkpoints', function (err, course) {
-            CheckpointType.populate(course.checkpoints, 'type', function (err, data) {
-              res.send(courseItem);
-            });
+          CheckpointType.populate(course.checkpoints, 'type', function (err, data) {
+            res.send(courseItem);
+          });
         });
       });
   });

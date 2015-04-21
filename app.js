@@ -30,7 +30,6 @@ initPassport(passport);
 app.use(passport.initialize());
 
 
-
 if (app.get('env') === 'development') {
   app.use(express.static(path.join(__dirname, '../muggles-client')));
   // This covers serving up the index page
@@ -39,7 +38,7 @@ if (app.get('env') === 'development') {
   app.use(express.static(path.join(__dirname, '../muggles-client/app/views')));
 
 
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -51,7 +50,7 @@ if (app.get('env') === 'development') {
 if (app.get('env') === 'production') {
   app.use(express.static(path.join(__dirname, '/dist')));
 
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,

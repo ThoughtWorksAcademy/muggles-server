@@ -3,7 +3,7 @@
 var mongoose = require('mongoose')
   , express = require('express')
   , request = require('supertest')
-  , app     = require('../../app.js');
+  , app = require('../../app.js');
 
 
 var router = express.Router();

@@ -1,4 +1,4 @@
-module.exports = function(app, passport) {
+module.exports = function (app, passport) {
   app.use('/api/stations', require('./routes/stations'));
   app.use('/api/users', require('./routes/users')(passport));
   app.use('/api/trainees', require('./routes/trainees')(passport));
