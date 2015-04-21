@@ -95,7 +95,7 @@ module.exports = function (passport) {
         res.send(trainee.courses);
       });
   });
- 
+
   router.patch('course/checkpoints/', function () {
 
   });
