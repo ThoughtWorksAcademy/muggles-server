@@ -1,0 +1,2 @@
+{"__v":0,"_id":{"$oid" : "550249080bf4a43115ef2dac"}, "username":"zhang", "password":"san", "courses": [{"course":{"$oid":"550240bcb3e142a909f1fa02"},"trainer": {"$oid":"550240fe573a3bf20a81ac66"},"sponsor":{"$oid":"5507c34d163d7e1da77dddd9"}}]}
+{"__v":0,"_id":{"$oid" : "550249080bf4a43115ef2dac"}, "username":"zhang", "password":"san", "courses": [{"course":{"$oid":"550240bcb3e142a909f1fa02"},"trainer": {"$oid":"550240fe573a3bf20a81ac66"},"sponsor":{"$oid":"5507c34d163d7e1da77dddd9"}}]}
