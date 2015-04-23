@@ -7,7 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/muggles');
+mongoose.connect('mongodb://localhost/twa-muggles');
 
 
 fs.readdirSync(__dirname + '/app/models').forEach(function (file) {
