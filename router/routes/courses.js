@@ -12,10 +12,8 @@ router.post('/', function (req, res) {
 
   Checkpoint.find({}, function (err, checkpoints) {
     for (var i = 0; i < checkpoints.length; i++) {
-      console.log(checkpoints[i]);
       course.checkpoints.push(checkpoints[i]._id);
     }
-
 
     course.save(function (err) {
       if (err) {
