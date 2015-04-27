@@ -57,15 +57,6 @@ module.exports = function (passport) {
       });
   });
 
-  router.post('/stations', function (req, res) {
-    Station.create({
-      name: '欧亚学院',
-      courses: '需要填充的课程',
-      students: '需要填充的学生列表'
-    });
-    res.send('success');
-  });
-
   router.get('/stations/:id/courses', function (req, res) {
     var id = req.params.id;
     Station.findById(id)
@@ -83,33 +74,6 @@ module.exports = function (passport) {
         res.send(station.trainees);
       });
   });
-
-  router.post('/A', function (req, res) {
-    var trainer = new Trainer();
-    trainer.username = 'trainerA';
-    trainer.password = 'trainerA';
-    trainer.save(function (err) {
-      res.send('Trainer 保存成功');
-    });
-  });
-
-
-  router.post('/', function (req, res) {
-    var trainer = new Trainer();
-    trainer.username = 'test';
-    trainer.password = 'test';
-    Station.find({}, function (err, stations) {
-      for (var i = 0; i < stations.length; i++) {
-        trainer.stations.push(stations[i]._id);
-      }
-
-      trainer.save(function (err) {
-        res.send('Trainer 保存成功');
-      });
-    });
-
-  });
-
 
   router.patch('/users/:userId/course/:courseId/checkpoints/:id', function (req, res) {
     var userId = req.params.userId;

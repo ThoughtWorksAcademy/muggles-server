@@ -54,37 +54,6 @@ module.exports = function (passport) {
     });
   });
 
-
-  router.post('/A', function (req, res) {
-    var trainee = new Trainee();
-    trainee.username = 'traineeA';
-    trainee.password = 'TraineeA';
-    trainee.save(function (err) {
-      res.send('trainee 保存成功');
-    });
-  });
-
-  router.post('/', function (req, res) {
-    var trainee = new Trainee();
-    trainee.username = 'zhang';
-    trainee.password = 'san';
-    Course.find({}, function (err, courses) {
-
-      for (var i = 0; i < courses.length; i++) {
-        trainee.courses.push({
-          course: courses[i]._id,
-          trainer: '550240fe573a3bf20a81ac66',
-          sponsor: '5507c34d163d7e1da77dddd9',
-          result: []
-        });
-      }
-
-      trainee.save(function (err, trainee) {
-        res.send('trainee 保存|成功');
-      });
-    });
-  });
-
   router.get('/:id/courses/', function (req, res) {
 
     Trainee.findById(req.params.id)
