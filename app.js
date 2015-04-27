@@ -10,8 +10,8 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/twa-muggles');
 
 
-fs.readdirSync(__dirname + '/app/models').forEach(function (file) {
-  if (~file.indexOf('.js')) require(__dirname + '/app/models/' + file);
+fs.readdirSync(__dirname + '/models').forEach(function (file) {
+  if (~file.indexOf('.js')) require(__dirname + '/models/' + file);
 });
 
 var app = express();
@@ -30,7 +30,7 @@ initPassport(passport);
 app.use(passport.initialize());
 
 // routes
-var router = require('./router');
+var router = require('./routes');
 router(app, passport);
 
 // catch 404 and forward to error handler
