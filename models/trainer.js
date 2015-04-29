@@ -9,7 +9,7 @@ var TrainerSchema = new Schema({
   create_date: String,
   image: String,
   phone_number: String,
-  groups: [],
+  groups: [{type: Schema.ObjectId, ref: "Group"}],
   stations: [{type: Schema.ObjectId, ref: 'Station'}]
 });
 

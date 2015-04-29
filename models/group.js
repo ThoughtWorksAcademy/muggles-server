@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var GroupSchema = new Schema({
   name: String,
   github: String,
-  trainer: []
+  trainer: [{type: Schema.ObjectId, ref: "Trainer"}]
 });
 
-mongoose.model('User', GroupSchema);
+mongoose.model('Group', GroupSchema);

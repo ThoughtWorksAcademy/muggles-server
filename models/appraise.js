@@ -3,10 +3,10 @@ var Schema = mongoose.Schema;
 
 var AppraiseSchema = new Schema({
   level: String,
-  appraiser: String,
+  appraiser: {type: Schema.ObjectId, ref: "Trainer"},
   comment: String,
   data: String,
   type: String
 });
 
-mongoose.model('User', AppraiseSchema);
+mongoose.model('Appraise', AppraiseSchema);
