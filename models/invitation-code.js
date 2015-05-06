@@ -10,4 +10,3 @@ var InvitationCodeSchema = new Schema({
 });
 
 mongoose.model('InvitationCode', InvitationCodeSchema);
-
