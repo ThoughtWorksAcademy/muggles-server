@@ -12,7 +12,7 @@ var _ = require('lodash');
 var LOGIN_FAILURE = '邮箱或密码错误';
 var LOGIN_SUCCESS = '登录成功';
 
-router.post('/login', function (req, res) {
+router.post('/', function (req, res) {
 
     var email = req.body.user.email;
     var password = req.body.user.password;
