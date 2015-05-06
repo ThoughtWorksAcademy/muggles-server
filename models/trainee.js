@@ -12,13 +12,13 @@ var TraineeSchema = new Schema({
   current_group: String,
   groups: [{type: Schema.ObjectId, ref: "Group"}],
   appraise: [{type: Schema.ObjectId, ref: "Appraise"}],
-  courses: [{
+  courses: [{//之前的
     course: {type: Schema.ObjectId, ref: 'Course'},
     trainer: {type: Schema.ObjectId, ref: 'Trainer'},
     sponsor: {type: Schema.ObjectId, ref: 'Trainee'},
     result: [{checkpointId: String, traineeChecked: Boolean, trainerChecked: Boolean, display: Boolean}]
   }],
-  station: {type: String, default: '某一讲课地点：欧亚'}
+  station: {type: String, default: '某一讲课地点：欧亚'}//之前的
 });
 
 mongoose.model('Trainee', TraineeSchema);
