@@ -88,7 +88,7 @@ module.exports = function (passport) {
         next(err);
       })
   });
-  
+
   router.post('/', function (req, res, next) {
 
     var trainee = req.body;
@@ -102,6 +102,10 @@ module.exports = function (passport) {
 
         next(err);
       })
+  });
+
+  router.put('/:id/appraise', function(req, res, next) {
+    console.log('add appraise');
   });
 
   return router;
