@@ -24,24 +24,10 @@ router.get('/:content', function(req, res, next) {
         res.send({state: 200, data: invitation, message: CORRECT_CODE})
       }
     })
-    .onReject(function(err) {
+   .onReject(function(err) {
 
       next(err);
-    })
-});
-
-router.post('/', function(req, res, next) {
-
-  InvitationCode.create({name: 'invitationCode', content: '2003967524987'})
-    .then(function(data) {
-
-      console.log(data);
-      res.send(data);
-    })
-    .onReject(function(err) {
-
-      next(err)
-    })
+   })
 });
 
 module.exports = router;
