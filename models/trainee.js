@@ -2,14 +2,15 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var TraineeSchema = new Schema({
-  username: String,
+  name: String,
+  email: String,
   password: String,
-  sex: String,
-  create_date: String,
+  gender: String,
+  create_date: Date,
   image: String,
   github: String,
   phone_number: String,
-  current_group: String,
+  current_group: {type: Schema.ObjectId, ref: "Group"},
   groups: [{type: Schema.ObjectId, ref: "Group"}],
   appraise: [{type: Schema.ObjectId, ref: "Appraise"}],
   courses: [{
