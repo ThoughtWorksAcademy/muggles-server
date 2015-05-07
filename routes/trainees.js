@@ -106,7 +106,9 @@ module.exports = function (passport) {
 
   router.put('/:id/appraise', function(req, res, next) {
     console.log('add appraise');
-    res.send('fjsalj');
+    var appraise = req.body;
+
+    res.send(appraise);
   });
 
   return router;
