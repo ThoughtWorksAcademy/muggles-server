@@ -5,11 +5,11 @@ var TrainerSchema = new Schema({
   username: String,
   password: String,
   email: String,
-  sex: String,
+  gender: String,
   create_date: String,
   image: String,
   phone_number: String,
-  groups: [{type: Schema.ObjectId, ref: "Group"}],
+  groups: [{type: Schema.ObjectId, ref: 'Group'}],
   stations: [{type: Schema.ObjectId, ref: 'Station'}]//之前的
 });
 
