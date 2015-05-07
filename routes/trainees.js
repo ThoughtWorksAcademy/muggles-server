@@ -1,12 +1,13 @@
 var mongoose = require('mongoose');
 var express = require('express');
 var router = express.Router();
+
 var User = mongoose.model('User');
 var Trainee = mongoose.model('Trainee');
-
-var REGISTER_SUCCESS = '注册成功';
 var Course = mongoose.model('Course');
 var LocalStrategy = require('passport-local').Strategy;
+
+var REGISTER_SUCCESS = '注册成功';
 
 module.exports = function (passport) {
 
