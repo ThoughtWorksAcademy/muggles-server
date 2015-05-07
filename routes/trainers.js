@@ -35,7 +35,7 @@ module.exports = function (passport) {
     }
   ));
 
-  router.post('/', function (req, res, next) {
+  router.post('/login', function (req, res, next) {
     var email = req.body.user.email;
     var password = req.body.user.password;
     var session = req.session;
