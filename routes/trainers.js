@@ -51,7 +51,7 @@ module.exports = function (passport) {
       res.send({state: 200, data: true, message: LOGIN_SUCCESS});
     });
   });
-  
+
   router.post('/login', function (req, res, next) {
     passport.authenticate('trainer', function (err, user, info) {
       if (err) {
