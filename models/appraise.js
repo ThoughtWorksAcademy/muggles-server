@@ -8,7 +8,8 @@ var AppraiseSchema = new Schema({
   appraiser: {type: Schema.ObjectId, ref: 'Trainer'},
   group: {type: Schema.ObjectId, ref: 'Group'},
   comment: String,
-  create_date: String,
+  appraised_date: Date,
+  create_date: Date,
   type: String
 });
 

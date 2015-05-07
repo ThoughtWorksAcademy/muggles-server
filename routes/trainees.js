@@ -3,6 +3,9 @@ var express = require('express');
 var router = express.Router();
 var User = mongoose.model('User');
 var Trainee = mongoose.model('Trainee');
+var Appraise = mongoose.model('Appraise');
+var Group = mongoose.model('Group');
+var Trainer = mongoose.model('Trainer');
 
 var REGISTER_SUCCESS = '注册成功';
 var Course = mongoose.model('Course');
@@ -56,6 +59,29 @@ module.exports = function (passport) {
     });
   });
 
+  router.get('/:id', function(req, res, next) {
+
+    Trainee.findById(req.params.id)
+      .populate('appraises')
+      .exec()
+      .then(function(trainee) {
+
+        return Group.populate(trainee, 'appraises.group');
+      })
+      .then(function(trainee) {
+
+        return Trainer.populate(trainee, 'appraises.appraiser')
+      })
+      .then(function(trainee) {
+
+        res.send({state: 200, data: trainee, message: ''})
+      })
+      .onReject(function(err) {
+
+        next(err);
+      })
+  });
+
   router.get('/:id/courses/', function (req, res) {
 
     Trainee.findById(req.params.id)
@@ -67,7 +93,7 @@ module.exports = function (passport) {
       });
   });
 
-  router.get('/:email', function (req, res, next) {
+  router.get('/verification/:email', function (req, res, next) {
 
     var email = req.params.email;
 

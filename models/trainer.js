@@ -6,7 +6,7 @@ var TrainerSchema = new Schema({
   password: String,
   email: String,
   gender: String,
-  create_date: String,
+  create_date: Date,
   image: String,
   phone_number: String,
   groups: [{type: Schema.ObjectId, ref: 'Group'}],
