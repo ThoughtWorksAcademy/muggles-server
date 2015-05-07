@@ -6,9 +6,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var session = require('express-session');
+
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/twa-muggles');
-
 
 fs.readdirSync(__dirname + '/models').forEach(function (file) {
   if (~file.indexOf('.js')) require(__dirname + '/models/' + file);
@@ -23,6 +24,13 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
+
+app.use(session({
+  secret: 'muggles',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 var passport = require('passport');
 var initPassport = require('./passport/init');
