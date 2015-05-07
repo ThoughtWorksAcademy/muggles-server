@@ -43,12 +43,12 @@ module.exports = function (passport) {
     Trainer.findOne({email: email}, function (err, user) {
 
       if (!user || user.password !== password) {
-        return res.send({state: 401, data: false, message: LOGIN_FAILURE});
+        return res.send({state: 401, data: true, message: LOGIN_FAILURE});
       }
 
       session.currentUserId = user._id;
 
-      res.send({state: 200, data: true, message: LOGIN_SUCCESS});
+      res.send({state: 200, data: false, message: LOGIN_SUCCESS});
     });
   });
 
