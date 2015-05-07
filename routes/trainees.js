@@ -1,11 +1,12 @@
 var mongoose = require('mongoose');
 var express = require('express');
 var router = express.Router();
+var LocalStrategy = require('passport-local').Strategy;
 
 var User = mongoose.model('User');
 var Trainee = mongoose.model('Trainee');
 var Course = mongoose.model('Course');
-var LocalStrategy = require('passport-local').Strategy;
+var Appraise = mongoose.model('Appraise');
 
 var REGISTER_SUCCESS = '注册成功';
 
@@ -105,11 +106,21 @@ module.exports = function (passport) {
       })
   });
 
-  router.put('/:id/appraise', function(req, res, next) {
-    console.log('add appraise');
+  router.put('/:id/appraise', function (req, res, next) {
+    var userId = req.params.id;
     var appraise = req.body;
+    Appraise.create(appraise)
+      .then(function (appraise) {
+        return Trainee.findById(userId, function (err, trainee) {
+          trainee.appraises.push(appraise._id);
+          trainee.save();
+          res.send(trainee);
+        });
+      })
+      .onReject(function (err) {
+        next(err);
+      });
 
-    res.send(appraise);
   });
 
   return router;
