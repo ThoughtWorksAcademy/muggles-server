@@ -10,6 +10,7 @@ var Trainee = mongoose.model('Trainee');
 router.get('/:id/trainees', function (req, res, next) {
   var groupId = req.params.id;
   Trainee.find({}, function (err, trainees) {
+    var currentUserName = req.session.currentUserName;
     if(err) {next(err)}
     var result = [];
     trainees.forEach(function (trainee) {
@@ -18,7 +19,7 @@ router.get('/:id/trainees', function (req, res, next) {
       }
     });
 
-    res.send(trainees);
+    res.send({trainees: trainees,currentUserName: currentUserName});
   });
 });
 
