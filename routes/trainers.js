@@ -11,7 +11,7 @@ var _ = require('lodash');
 
 var LOGIN_FAILURE = '邮箱或密码错误';
 var LOGIN_SUCCESS = '登录成功';
-
+var LOGOUT_SUCCESS = '退出成功';
 
 module.exports = function (passport) {
 
@@ -56,6 +56,13 @@ module.exports = function (passport) {
 
         next(err);
       })
+  });
+
+  router.delete('/',function(req, res) {
+    req.session.currentUserId = null;
+    req.session.currentUserName = null;
+
+    res.send({state: 200, data: {}, message: LOGOUT_SUCCESS});
   });
 
   router.post('/login', function (req, res, next) {
