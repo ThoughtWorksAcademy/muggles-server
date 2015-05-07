@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var TraineeSchema = new Schema({
-  name: String,
+  username: String,
   email: String,
   password: String,
   gender: String,
@@ -10,9 +10,9 @@ var TraineeSchema = new Schema({
   image: String,
   github: String,
   phone_number: String,
-  current_group: {type: Schema.ObjectId, ref: "Group"},
-  groups: [{type: Schema.ObjectId, ref: "Group"}],
-  appraise: [{type: Schema.ObjectId, ref: "Appraise"}],
+  current_group: {type: Schema.ObjectId, ref: 'Group'},
+  groups: [{type: Schema.ObjectId, ref: 'Group'}],
+  appraises: [{type: Schema.ObjectId, ref: 'Appraise'}],
   courses: [{//之前的
     course: {type: Schema.ObjectId, ref: 'Course'},
     trainer: {type: Schema.ObjectId, ref: 'Trainer'},
