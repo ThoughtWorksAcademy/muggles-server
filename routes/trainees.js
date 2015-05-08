@@ -1,15 +1,16 @@
 var mongoose = require('mongoose');
 var express = require('express');
 var router = express.Router();
+var LocalStrategy = require('passport-local').Strategy;
+
 var User = mongoose.model('User');
 var Trainee = mongoose.model('Trainee');
 var Appraise = mongoose.model('Appraise');
 var Group = mongoose.model('Group');
 var Trainer = mongoose.model('Trainer');
+var Course = mongoose.model('Course');
 
 var REGISTER_SUCCESS = '注册成功';
-var Course = mongoose.model('Course');
-var LocalStrategy = require('passport-local').Strategy;
 
 module.exports = function (passport) {
 
@@ -131,10 +132,63 @@ module.exports = function (passport) {
       })
   });
 
-  router.put('/:id/appraise', function(req, res, next) {
-    console.log('add appraise');
-    res.send('fjsalj');
+  router.post('/:id/appraise', function(req, res, next) {
+
+    var trainee_id = req.params.id;
+    var appraised = req.body.appraise;
+
+    Trainee.findById(trainee_id)
+      .populate('appraises')
+      .exec()
+      .then(function(trainee) {
+
+        return trainee.appraises.find(function(appraise) {
+          return appraise.appraised_date === appraised_date
+        })
+      })
+      .then(function(has_appraised) {
+
+        if(has-appraised)
+        res.send({state: 200, data: trainee, message: ''})
+      })
+      .onReject(function(err) {
+
+        next(err);
+      })
   });
 
+  router.put('/:id/appraise', function (req, res, next) {
+
+    var trainee_id = req.params.id;
+    var appraise = req.body;
+
+    appraise.appraiser = req.session.currentUserId;
+    Appraise.create(appraise)
+      .then(function (appraise) {
+
+        return Trainee.findById(trainee_id)
+          .populate('appraises')
+          .exec(function (err, trainee) {
+
+            trainee.appraises.push(appraise._id);
+            trainee.save();
+        });
+      })
+      .then(function(trainee) {
+
+        return Group.populate(trainee, 'appraises.group');
+      })
+      .then(function(trainee) {
+
+        return Trainer.populate(trainee, 'appraises.appraiser')
+      })
+      .then(function(trainee) {
+
+        res.send({state: 200, data: trainee, message: ''})
+      })
+      .onReject(function (err) {
+        next(err);
+      });
+  });
   return router;
 };
