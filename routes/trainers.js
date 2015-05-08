@@ -58,12 +58,7 @@ module.exports = function (passport) {
       })
   });
 
-  router.delete('/',function(req, res) {
-    req.session.currentTrainerId = null;
-    req.session.currentTrainerName = null;
 
-    res.send({state: 200, data: {}, message: LOGOUT_SUCCESS});
-  });
 
   router.post('/login', function (req, res, next) {
     passport.authenticate('trainer', function (err, user, info) {
