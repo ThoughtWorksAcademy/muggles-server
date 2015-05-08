@@ -63,6 +63,7 @@ module.exports = function (passport) {
 
     Trainee.findById(req.params.id)
       .populate('appraises')
+      .populate('groups')
       .exec()
       .then(function(trainee) {
 
