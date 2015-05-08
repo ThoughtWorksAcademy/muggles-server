@@ -9,7 +9,7 @@ var Course = mongoose.model('Course');
 var Appraise = mongoose.model('Appraise');
 
 var REGISTER_SUCCESS = '注册成功';
-
+var APPRAISE_ADD_SUCCESS = '添加评价成功';
 module.exports = function (passport) {
 
   passport.use('trainee', new LocalStrategy(
@@ -114,7 +114,7 @@ module.exports = function (passport) {
         return Trainee.findById(userId, function (err, trainee) {
           trainee.appraises.push(appraise._id);
           trainee.save();
-          res.send(trainee);
+          res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
         });
       })
       .onReject(function (err) {
@@ -123,6 +123,19 @@ module.exports = function (passport) {
 
   });
 
+  router.put('/appraises', function (req, res, next) {
+    var trainees = req.body;
+    trainees.forEach(function (trainee) {
+      Appraise.create(trainee.appraise)
+      .then(function (appraise) {
+          return Trainee.findById(trainee._id, function (err, trainee) {
+            trainee.appraises.push(appraise._id);
+            trainee.save();
+          })
+        })
+    });
+    res.send({state: 200, data: trainees, message: APPRAISE_ADD_SUCCESS});
+  });
 
   return router;
 };
