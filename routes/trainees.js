@@ -188,7 +188,7 @@ module.exports = function (passport) {
     appraise.appraiser = req.session.currentUserId;
 
     var have_appraised = false;
-    Trainee.findById(userId)
+    Trainee.findById(trainee_id)
       .populate('appraises')
       .exec()
       .then(function (trainee) {
@@ -209,7 +209,7 @@ module.exports = function (passport) {
 
     Appraise.create(appraise)
       .then(function (appraise_entity) {
-        return Trainee.findById(userId, function (err, trainee) {
+        return Trainee.findById(trainee_id, function (err, trainee) {
           trainee.appraises.push(appraise_entity._id);
           trainee.save();
           res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
@@ -225,7 +225,7 @@ module.exports = function (passport) {
       })
       .then(function(trainee) {
 
-        res.send({state: 200, data: trainee, message: ''})
+        //res.send({state: 200, data: trainee, message: ''})
       })
       .onReject(function (err) {
         next(err);
@@ -233,8 +233,15 @@ module.exports = function (passport) {
   });
 
   router.put('/appraises', function (req, res, next) {
-    var trainees = req.body;
+    var appraiser = req.session.currentUserId;
+    var appraised_date = req.body.appraise.appraised_date;
+    var type = req.body.appraise.type;
+    var trainees = req.body.trainees;
     trainees.forEach(function (trainee) {
+      trainee.appraise.appraised_date = appraised_date;
+      trainee.appraise.type = type;
+      trainee.appraise.appraiser = appraiser;
+
       Appraise.create(trainee.appraise)
         .then(function (appraise) {
           return Trainee.findById(trainee._id, function (err, trainee) {
