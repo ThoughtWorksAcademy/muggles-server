@@ -11,15 +11,17 @@ router.get('/:id/trainees', function (req, res, next) {
   var groupId = req.params.id;
   Trainee.find({}, function (err, trainees) {
     var currentUserName = req.session.currentUserName;
-    if(err) {next(err)}
+    if (err) {
+      next(err)
+    }
     var result = [];
     trainees.forEach(function (trainee) {
-      if(_.contains(trainee.group, groupId)) {
-          result.push(trainee);
+      if (_.contains(trainee.group, groupId)) {
+        result.push(trainee);
       }
     });
 
-    res.send({trainees: trainees,currentUserName: currentUserName});
+    res.send({trainees: trainees, currentUserName: currentUserName});
   });
 });
 

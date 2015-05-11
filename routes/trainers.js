@@ -58,7 +58,7 @@ module.exports = function (passport) {
       })
   });
 
-  router.delete('/',function(req, res) {
+  router.delete('/', function (req, res) {
     req.session.currentUserId = null;
     req.session.currentUserName = null;
 

@@ -14,6 +14,11 @@ var Trainer = mongoose.model('Trainer');
 var Course = mongoose.model('Course');
 
 var trainee_controller = require('../controllers/trainee');
+
+var APPRAISE_ADD_SUCCESS = '添加评价成功';
+var APPRAISED_ALREADY = '此学生该条评价已存在';
+
+
 module.exports = function (passport) {
 
   passport.use('trainee', new LocalStrategy(
@@ -78,14 +83,22 @@ module.exports = function (passport) {
   router.post('/', trainee_controller.create_trainee);
   router.post('/:id/appraise', trainee_controller.has_appraised);
   router.put('/；id/appraise', trainee_controller.update_appraises_by_id);
-
+  
 
   router.put('/appraises', function (req, res, next) {
-    var trainees = req.body;
+    var appraiser = req.session.currentUserId;
+    var appraised_date = req.body.appraise.appraised_date;
+    var type = req.body.appraise.type;
+    var trainees = req.body.trainees;
     trainees.forEach(function (trainee) {
+      trainee.appraise.appraised_date = appraised_date;
+      trainee.appraise.type = type;
+      trainee.appraise.appraiser = appraiser;
+
       Appraise.create(trainee.appraise)
-      .then(function (appraise) {
+        .then(function (appraise) {
           return Trainee.findById(trainee._id, function (err, trainee) {
+            //TODO 根据type和date检查唯一性，即应该再次判断该学生是否已经添加了此种类型的当天评价
             trainee.appraises.push(appraise._id);
             trainee.save();
           })
