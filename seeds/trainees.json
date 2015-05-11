@@ -1,2 +1,0 @@
-{"__v":0,"_id":{"$oid" : "550249080bf4a43115ef2dac"}, "username":"zhang", "password":"san", "courses": [{"course":{"$oid":"5509297aec4ed15f5624a823"},"trainer": {"$oid":"550240fe573a3bf20a81ac66"},"sponsor":{"$oid":"550249080bf4a43115ef2daa"}}]}
-{"__v":0,"_id":{"$oid" : "550249080bf4a43115ef2dad"}, "username":"li", "password":"si", "courses": [{"course":{"$oid":"5509297aec4ed15f5624a823"},"trainer": {"$oid":"550240fe573a3bf20a81ac66"},"sponsor":{"$oid":"550249080bf4a43115ef2dac"}}]}

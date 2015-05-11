@@ -1,7 +1,7 @@
 'use strict';
 
-const ERROR_CODE = '请填写正确的邀请码';
-const CORRECT_CODE = '邀请码输入正确';
+var ERROR_CODE = '请填写正确的邀请码';
+var CORRECT_CODE = '邀请码输入正确';
 
 var express = require('express');
 var router = express.Router();

@@ -1,3 +1,6 @@
+'use strict';
+var _ = require('lodash');
+var moment = require('moment');
 var mongoose = require('mongoose');
 var express = require('express');
 var router = express.Router();
@@ -5,10 +8,19 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var User = mongoose.model('User');
 var Trainee = mongoose.model('Trainee');
-var Course = mongoose.model('Course');
 var Appraise = mongoose.model('Appraise');
+var Group = mongoose.model('Group');
+var Trainer = mongoose.model('Trainer');
+var Course = mongoose.model('Course');
 
+var trainee_controller = require('../controllers/trainee');
 var REGISTER_SUCCESS = '注册成功';
+
+var DAY = '日';
+var WEEK = '周';
+var MONTH = '月';
+var SEASON = '夏';
+var SEASON_TYPE = '夏季';
 var APPRAISE_ADD_SUCCESS = '添加评价成功';
 var APPRAISED_ALREADY = '此学生该条评价已存在';
 
@@ -62,6 +74,7 @@ module.exports = function (passport) {
     });
   });
 
+  router.get('/:id', trainee_controller.get_trainee_by_id);
   router.get('/:id/courses/', function (req, res) {
 
     Trainee.findById(req.params.id)
@@ -73,7 +86,7 @@ module.exports = function (passport) {
       });
   });
 
-  router.get('/:email', function (req, res, next) {
+  router.get('/verification/:email', function (req, res, next) {
 
     var email = req.params.email;
 
@@ -110,9 +123,69 @@ module.exports = function (passport) {
       })
   });
 
+  function format_date(appraise){
+    if(appraise.type === DAY) {
+
+      appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM- HH:mm:ss');
+    } else if(appraise.type === WEEK) {
+
+      appraise.appraised_date = moment(appraise.appraised_date).format('W');
+    } else if(appraise.type === MONTH) {
+
+      appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM');
+    } else {
+      appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM');
+    }
+  }
+
+  router.post('/:id/appraise', function(req, res, next) {
+
+    var trainee_id = req.params.id;
+    var current_appraise = req.body.appraise;
+    //current_appraise.appraised_date = format_date(current_appraise);
+        console.log(current_appraise);
+
+    Trainee.findById(trainee_id)
+      .populate('appraises')
+      .exec()
+      .then(function(trainee) {
+
+        var new_trainee = trainee;
+        new_trainee.appraises = trainee.appraises.filter(function(appraise) {
+          return appraise.type === current_appraise.type;
+        });
+        return new_trainee;
+      })
+      .then(function(trainee) {
+
+        trainee.appraises.forEach(function(appraise) {
+          appraise.appraised_date = format_date(appraise.appraised_date);
+        });
+        return trainee;
+      })
+      .then(function(trainee) {
+
+        var result = _.find(trainee.appraises, function(appraise) {
+          return appraise.appraised_date === current_appraise.appraised_date
+        });
+
+        if(!result) {
+          res.send({state: 200, data: false, message: '还未评价'})
+        } else {
+          res.send({state: 200, data: true, message: '已评价'})
+        }
+      })
+      .onReject(function(err) {
+
+        next(err);
+      })
+  });
+
   router.put('/:id/appraise', function (req, res, next) {
-    var userId = req.params.id;
+
+    var trainee_id = req.params.id;
     var appraise = req.body;
+    appraise.appraiser = req.session.currentUserId;
 
     var have_appraised = false;
     Trainee.findById(userId)
@@ -141,6 +214,18 @@ module.exports = function (passport) {
           trainee.save();
           res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
         });
+      })
+      .then(function(trainee) {
+
+        return Group.populate(trainee, 'appraises.group');
+      })
+      .then(function(trainee) {
+
+        return Trainer.populate(trainee, 'appraises.appraiser')
+      })
+      .then(function(trainee) {
+
+        res.send({state: 200, data: trainee, message: ''})
       })
       .onReject(function (err) {
         next(err);
