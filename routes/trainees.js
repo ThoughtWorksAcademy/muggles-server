@@ -25,7 +25,6 @@ var APPRAISE_ADD_SUCCESS = '添加评价成功';
 var APPRAISED_ALREADY = '此学生该条评价已存在';
 
 
-
 module.exports = function (passport) {
 
   passport.use('trainee', new LocalStrategy(
@@ -123,14 +122,14 @@ module.exports = function (passport) {
       })
   });
 
-  function format_date(appraise){
-    if(appraise.type === DAY) {
+  function format_date(appraise) {
+    if (appraise.type === DAY) {
 
       appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM- HH:mm:ss');
-    } else if(appraise.type === WEEK) {
+    } else if (appraise.type === WEEK) {
 
       appraise.appraised_date = moment(appraise.appraised_date).format('W');
-    } else if(appraise.type === MONTH) {
+    } else if (appraise.type === MONTH) {
 
       appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM');
     } else {
@@ -138,44 +137,44 @@ module.exports = function (passport) {
     }
   }
 
-  router.post('/:id/appraise', function(req, res, next) {
+  router.post('/:id/appraise', function (req, res, next) {
 
     var trainee_id = req.params.id;
     var current_appraise = req.body.appraise;
     //current_appraise.appraised_date = format_date(current_appraise);
-        console.log(current_appraise);
+    console.log(current_appraise);
 
     Trainee.findById(trainee_id)
       .populate('appraises')
       .exec()
-      .then(function(trainee) {
+      .then(function (trainee) {
 
         var new_trainee = trainee;
-        new_trainee.appraises = trainee.appraises.filter(function(appraise) {
+        new_trainee.appraises = trainee.appraises.filter(function (appraise) {
           return appraise.type === current_appraise.type;
         });
         return new_trainee;
       })
-      .then(function(trainee) {
+      .then(function (trainee) {
 
-        trainee.appraises.forEach(function(appraise) {
+        trainee.appraises.forEach(function (appraise) {
           appraise.appraised_date = format_date(appraise.appraised_date);
         });
         return trainee;
       })
-      .then(function(trainee) {
+      .then(function (trainee) {
 
-        var result = _.find(trainee.appraises, function(appraise) {
+        var result = _.find(trainee.appraises, function (appraise) {
           return appraise.appraised_date === current_appraise.appraised_date
         });
 
-        if(!result) {
+        if (!result) {
           res.send({state: 200, data: false, message: '还未评价'})
         } else {
           res.send({state: 200, data: true, message: '已评价'})
         }
       })
-      .onReject(function(err) {
+      .onReject(function (err) {
 
         next(err);
       })
@@ -215,15 +214,15 @@ module.exports = function (passport) {
           res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
         });
       })
-      .then(function(trainee) {
+      .then(function (trainee) {
 
         return Group.populate(trainee, 'appraises.group');
       })
-      .then(function(trainee) {
+      .then(function (trainee) {
 
         return Trainer.populate(trainee, 'appraises.appraiser')
       })
-      .then(function(trainee) {
+      .then(function (trainee) {
 
         //res.send({state: 200, data: trainee, message: ''})
       })
