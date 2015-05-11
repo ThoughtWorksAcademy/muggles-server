@@ -110,7 +110,7 @@ var has_appraised = function(req, res, next) {
     })
 };
 
-var update_appraises_by_id = function(req, res, next) {
+var add_appraise = function(req, res, next) {
 
   var trainee_id = req.params.id;
   var appraise = req.body;
@@ -130,10 +130,33 @@ var update_appraises_by_id = function(req, res, next) {
     });
 };
 
+var add_appraises = function (req, res, next) {
+  var appraiser = req.session.currentUserId;
+  var appraised_date = req.body.appraise.appraised_date;
+  var type = req.body.appraise.type;
+  var trainees = req.body.trainees;
+  trainees.forEach(function (trainee) {
+    trainee.appraise.appraised_date = appraised_date;
+    trainee.appraise.type = type;
+    trainee.appraise.appraiser = appraiser;
+
+    Appraise.create(trainee.appraise)
+      .then(function (appraise) {
+        return Trainee.findById(trainee._id, function (err, trainee) {
+          //TODO 根据type和date检查唯一性，即应该再次判断该学生是否已经添加了此种类型的当天评价
+          trainee.appraises.push(appraise._id);
+          trainee.save();
+        })
+      })
+  });
+  res.send({state: 200, data: trainees, message: APPRAISE_ADD_SUCCESS});
+};
+
 module.exports = {
   get_trainee_by_id: get_trainee_by_id,
   verify_trainee_by_email: verify_trainee_by_email,
   create_trainee: create_trainee,
   has_appraised: has_appraised,
-  update_appraises_by_id: update_appraises_by_id
+  add_appraise: add_appraise,
+  add_appraises: add_appraises
 };

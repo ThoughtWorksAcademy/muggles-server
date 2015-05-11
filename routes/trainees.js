@@ -81,31 +81,59 @@ module.exports = function (passport) {
   router.get('/:id', trainee_controller.get_trainee_by_id);
   router.get('/verification/:email', trainee_controller.verify_trainee_by_email);
   router.post('/', trainee_controller.create_trainee);
-  router.post('/:id/appraise', trainee_controller.has_appraised);
-  router.put('/；id/appraise', trainee_controller.update_appraises_by_id);
-  
+  router.get('/:id/appraise', trainee_controller.has_appraised);
+  router.put('/:id/appraise', trainee_controller.add_appraise);
 
-  router.put('/appraises', function (req, res, next) {
-    var appraiser = req.session.currentUserId;
-    var appraised_date = req.body.appraise.appraised_date;
-    var type = req.body.appraise.type;
-    var trainees = req.body.trainees;
-    trainees.forEach(function (trainee) {
-      trainee.appraise.appraised_date = appraised_date;
-      trainee.appraise.type = type;
-      trainee.appraise.appraiser = appraiser;
-
-      Appraise.create(trainee.appraise)
-        .then(function (appraise) {
-          return Trainee.findById(trainee._id, function (err, trainee) {
-            //TODO 根据type和date检查唯一性，即应该再次判断该学生是否已经添加了此种类型的当天评价
-            trainee.appraises.push(appraise._id);
-            trainee.save();
-          })
-        })
-    });
-    res.send({state: 200, data: trainees, message: APPRAISE_ADD_SUCCESS});
-  });
+  //router.put('/:id/appraise', function (req, res, next) {
+  //
+  //  var trainee_id = req.params.id;
+  //  var appraise = req.body;
+  //  appraise.appraiser = req.session.currentUserId;
+  //
+  //  var have_appraised = false;
+  //  Trainee.findById(trainee_id)
+  //    .populate('appraises')
+  //    .exec()
+  //    .then(function (trainee) {
+  //      trainee.appraises.forEach(function (one) {
+  //        if (one.type === appraise.type && one.date === appraise.date) {
+  //          have_appraised = true;
+  //        }
+  //      });
+  //    })
+  //    .onReject(function (err) {
+  //      next(err);
+  //    });
+  //
+  //  if (have_appraised) {
+  //    res.send({state: 200, data: {}, message: APPRAISED_ALREADY});
+  //    return;
+  //  }
+  //
+  //  Appraise.create(appraise)
+  //    .then(function (appraise_entity) {
+  //      return Trainee.findById(trainee_id, function (err, trainee) {
+  //        trainee.appraises.push(appraise_entity._id);
+  //        trainee.save();
+  //        res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
+  //      });
+  //    })
+  //    .then(function (trainee) {
+  //
+  //      return Group.populate(trainee, 'appraises.group');
+  //    })
+  //    .then(function (trainee) {
+  //
+  //      return Trainer.populate(trainee, 'appraises.appraiser')
+  //    })
+  //    .then(function (trainee) {
+  //
+  //      //res.send({state: 200, data: trainee, message: ''})
+  //    })
+  //    .onReject(function (err) {
+  //      next(err);
+  //    });
+  //});
 
   return router;
 };
