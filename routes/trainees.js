@@ -64,30 +64,6 @@ module.exports = function (passport) {
   });
 
   router.get('/:id', trainee_controller.get_trainee_by_id);
-  //router.get('/:id', function(req, res, next) {
-  //
-  //  Trainee.findById(req.params.id)
-  //    .populate('appraises')
-  //    .populate('groups')
-  //    .exec()
-  //    .then(function(trainee) {
-  //
-  //      return Group.populate(trainee, 'appraises.group');
-  //    })
-  //    .then(function(trainee) {
-  //
-  //      return Trainer.populate(trainee, 'appraises.appraiser')
-  //    })
-  //    .then(function(trainee) {
-  //
-  //      res.send({state: 200, data: trainee, message: ''})
-  //    })
-  //    .onReject(function(err) {
-  //
-  //      next(err);
-  //    })
-  //});
-
   router.get('/:id/courses/', function (req, res) {
 
     Trainee.findById(req.params.id)
