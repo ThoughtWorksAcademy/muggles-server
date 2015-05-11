@@ -14,14 +14,6 @@ var Trainer = mongoose.model('Trainer');
 var Course = mongoose.model('Course');
 
 var trainee_controller = require('../controllers/trainee');
-var REGISTER_SUCCESS = '注册成功';
-
-var DAY = '日';
-var WEEK = '周';
-var MONTH = '月';
-var SEASON = '夏';
-var SEASON_TYPE = '夏季';
-var APPRAISE_ADD_SUCCESS = '添加评价成功';
 module.exports = function (passport) {
 
   passport.use('trainee', new LocalStrategy(
@@ -70,7 +62,6 @@ module.exports = function (passport) {
     });
   });
 
-  router.get('/:id', trainee_controller.get_trainee_by_id);
   router.get('/:id/courses/', function (req, res) {
 
     Trainee.findById(req.params.id)
@@ -82,132 +73,12 @@ module.exports = function (passport) {
       });
   });
 
-  router.get('/verification/:email', function (req, res, next) {
+  router.get('/:id', trainee_controller.get_trainee_by_id);
+  router.get('/verification/:email', trainee_controller.verify_trainee_by_email);
+  router.post('/', trainee_controller.create_trainee);
+  router.post('/:id/appraise', trainee_controller.has_appraised);
+  router.put('/；id/appraise', trainee_controller.update_appraises_by_id);
 
-    var email = req.params.email;
-
-    Trainee.findOne({email: email})
-      .exec()
-      .then(function (trainee) {
-
-        if (trainee) {
-
-          res.send({state: 200, data: false, message: '邮箱可用'})
-        } else {
-
-          res.send({state: 200, data: true, message: '邮箱已被注册'})
-        }
-      })
-      .onReject(function (err) {
-
-        next(err);
-      })
-  });
-
-  router.post('/', function (req, res, next) {
-
-    var trainee = req.body;
-
-    Trainee.create(trainee)
-      .then(function (trainee) {
-
-        res.send({state: 200, data: trainee, message: REGISTER_SUCCESS})
-      })
-      .onReject(function (err) {
-
-        next(err);
-      })
-  });
-
-  function format_date(appraise){
-    if(appraise.type === DAY) {
-
-      appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM- HH:mm:ss');
-    } else if(appraise.type === WEEK) {
-
-      appraise.appraised_date = moment(appraise.appraised_date).format('W');
-    } else if(appraise.type === MONTH) {
-
-      appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM');
-    } else {
-      appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM');
-    }
-  }
-
-  router.post('/:id/appraise', function(req, res, next) {
-
-    var trainee_id = req.params.id;
-    var current_appraise = req.body.appraise;
-    //current_appraise.appraised_date = format_date(current_appraise);
-        console.log(current_appraise);
-
-    Trainee.findById(trainee_id)
-      .populate('appraises')
-      .exec()
-      .then(function(trainee) {
-
-        var new_trainee = trainee;
-        new_trainee.appraises = trainee.appraises.filter(function(appraise) {
-          return appraise.type === current_appraise.type;
-        });
-        return new_trainee;
-      })
-      .then(function(trainee) {
-
-        trainee.appraises.forEach(function(appraise) {
-          appraise.appraised_date = format_date(appraise.appraised_date);
-        });
-        return trainee;
-      })
-      .then(function(trainee) {
-
-        var result = _.find(trainee.appraises, function(appraise) {
-          return appraise.appraised_date === current_appraise.appraised_date
-        });
-
-        if(!result) {
-          res.send({state: 200, data: false, message: '还未评价'})
-        } else {
-          res.send({state: 200, data: true, message: '已评价'})
-        }
-      })
-      .onReject(function(err) {
-
-        next(err);
-      })
-  });
-
-  router.put('/:id/appraise', function (req, res, next) {
-
-    var trainee_id = req.params.id;
-    var appraise = req.body;
-
-    appraise.appraiser = req.session.currentUserId;
-    Appraise.create(appraise)
-      .then(function (appraise) {
-
-        return Trainee.findById(trainee_id, function (err, trainee) {
-          trainee.appraises.push(appraise._id);
-          trainee.save();
-          res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
-        });
-      })
-      .then(function(trainee) {
-
-        return Group.populate(trainee, 'appraises.group');
-      })
-      .then(function(trainee) {
-
-        return Trainer.populate(trainee, 'appraises.appraiser')
-      })
-      .then(function(trainee) {
-
-        res.send({state: 200, data: trainee, message: ''})
-      })
-      .onReject(function (err) {
-        next(err);
-      });
-  });
 
   router.put('/appraises', function (req, res, next) {
     var trainees = req.body;
