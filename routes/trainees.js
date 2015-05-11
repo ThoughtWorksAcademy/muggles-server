@@ -1,5 +1,6 @@
 'use strict';
-
+var _ = require('lodash');
+var moment = require('moment');
 var mongoose = require('mongoose');
 var express = require('express');
 var router = express.Router();
@@ -15,6 +16,11 @@ var Course = mongoose.model('Course');
 var trainee_controller = require('../controllers/trainee');
 var REGISTER_SUCCESS = '注册成功';
 
+var DAY = '日';
+var WEEK = '周';
+var MONTH = '月';
+var SEASON = '夏';
+var SEASON_TYPE = '夏季';
 module.exports = function (passport) {
 
   passport.use('trainee', new LocalStrategy(
@@ -112,24 +118,57 @@ module.exports = function (passport) {
       })
   });
 
+  function format_date(appraise){
+    if(appraise.type === DAY) {
+
+      appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM- HH:mm:ss');
+    } else if(appraise.type === WEEK) {
+
+      appraise.appraised_date = moment(appraise.appraised_date).format('W');
+    } else if(appraise.type === MONTH) {
+
+      appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM');
+    } else {
+      appraise.appraised_date = moment(appraise.appraised_date).format('YYYY-MM');
+    }
+  }
+
   router.post('/:id/appraise', function(req, res, next) {
 
     var trainee_id = req.params.id;
-    var appraised = req.body.appraise;
+    var current_appraise = req.body.appraise;
+    //current_appraise.appraised_date = format_date(current_appraise);
+        console.log(current_appraise);
 
     Trainee.findById(trainee_id)
       .populate('appraises')
       .exec()
       .then(function(trainee) {
 
-        return trainee.appraises.find(function(appraise) {
-          return appraise.appraised_date === appraised_date
-        })
+        var new_trainee = trainee;
+        new_trainee.appraises = trainee.appraises.filter(function(appraise) {
+          return appraise.type === current_appraise.type;
+        });
+        return new_trainee;
       })
-      .then(function(has_appraised) {
+      .then(function(trainee) {
 
-        if(has-appraised)
-        res.send({state: 200, data: trainee, message: ''})
+        trainee.appraises.forEach(function(appraise) {
+          appraise.appraised_date = format_date(appraise.appraised_date);
+        });
+        return trainee;
+      })
+      .then(function(trainee) {
+
+        var result = _.find(trainee.appraises, function(appraise) {
+          return appraise.appraised_date === current_appraise.appraised_date
+        });
+
+        if(!result) {
+          res.send({state: 200, data: false, message: '还未评价'})
+        } else {
+          res.send({state: 200, data: true, message: '已评价'})
+        }
       })
       .onReject(function(err) {
 
