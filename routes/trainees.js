@@ -10,6 +10,10 @@ var Appraise = mongoose.model('Appraise');
 
 var REGISTER_SUCCESS = '注册成功';
 var APPRAISE_ADD_SUCCESS = '添加评价成功';
+var APPRAISED_ALREADY = '此学生该条评价已存在';
+
+
+
 module.exports = function (passport) {
 
   passport.use('trainee', new LocalStrategy(
@@ -109,10 +113,31 @@ module.exports = function (passport) {
   router.put('/:id/appraise', function (req, res, next) {
     var userId = req.params.id;
     var appraise = req.body;
+
+    var have_appraised = false;
+    Trainee.findById(userId)
+      .populate('appraises')
+      .exec()
+      .then(function (trainee) {
+        trainee.appraises.forEach(function (one) {
+          if (one.type === appraise.type && one.date === appraise.date) {
+            have_appraised = true;
+          }
+        });
+      })
+      .onReject(function (err) {
+        next(err);
+      });
+
+    if (have_appraised) {
+      res.send({state: 200, data: {}, message: APPRAISED_ALREADY});
+      return;
+    }
+
     Appraise.create(appraise)
-      .then(function (appraise) {
+      .then(function (appraise_entity) {
         return Trainee.findById(userId, function (err, trainee) {
-          trainee.appraises.push(appraise._id);
+          trainee.appraises.push(appraise_entity._id);
           trainee.save();
           res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
         });
@@ -120,15 +145,15 @@ module.exports = function (passport) {
       .onReject(function (err) {
         next(err);
       });
-
   });
 
   router.put('/appraises', function (req, res, next) {
     var trainees = req.body;
     trainees.forEach(function (trainee) {
       Appraise.create(trainee.appraise)
-      .then(function (appraise) {
+        .then(function (appraise) {
           return Trainee.findById(trainee._id, function (err, trainee) {
+            //TODO 根据type和date检查唯一性，即应该再次判断该学生是否已经添加了此种类型的当天评价
             trainee.appraises.push(appraise._id);
             trainee.save();
           })
