@@ -21,6 +21,7 @@ var WEEK = '周';
 var MONTH = '月';
 var SEASON = '夏';
 var SEASON_TYPE = '夏季';
+var APPRAISE_ADD_SUCCESS = '添加评价成功';
 module.exports = function (passport) {
 
   passport.use('trainee', new LocalStrategy(
@@ -185,12 +186,10 @@ module.exports = function (passport) {
     Appraise.create(appraise)
       .then(function (appraise) {
 
-        return Trainee.findById(trainee_id)
-          .populate('appraises')
-          .exec(function (err, trainee) {
-
-            trainee.appraises.push(appraise._id);
-            trainee.save();
+        return Trainee.findById(trainee_id, function (err, trainee) {
+          trainee.appraises.push(appraise._id);
+          trainee.save();
+          res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
         });
       })
       .then(function(trainee) {
@@ -209,5 +208,20 @@ module.exports = function (passport) {
         next(err);
       });
   });
+
+  router.put('/appraises', function (req, res, next) {
+    var trainees = req.body;
+    trainees.forEach(function (trainee) {
+      Appraise.create(trainee.appraise)
+      .then(function (appraise) {
+          return Trainee.findById(trainee._id, function (err, trainee) {
+            trainee.appraises.push(appraise._id);
+            trainee.save();
+          })
+        })
+    });
+    res.send({state: 200, data: trainees, message: APPRAISE_ADD_SUCCESS});
+  });
+
   return router;
 };
