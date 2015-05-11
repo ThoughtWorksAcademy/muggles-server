@@ -72,7 +72,7 @@ var has_appraised = function(req, res, next) {
 
   var trainee_id = req.params.id;
   var current_appraise = req.body.appraise;
-  //current_appraise.appraised_date = date_util.format_date(current_appraise);
+  current_appraise.appraised_date = date_util.format_date(current_appraise);
 
   Trainee.findById(trainee_id)
     .populate('appraises')
@@ -81,7 +81,7 @@ var has_appraised = function(req, res, next) {
 
       var new_trainee = trainee;
       new_trainee.appraises = trainee.appraises.filter(function(appraise) {
-        return appraise.type === current_appraise.type;
+        return appraise.type === current_appraise.type && appraise.group === current_appraise.group;
       });
       return new_trainee;
     })
