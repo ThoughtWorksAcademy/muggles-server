@@ -111,12 +111,7 @@ var has_appraised = function (req, res, next) {
     })
 };
 
-var add_appraise = function (req, res, next) {
-
-  var trainee_id = req.params.id;
-  var appraise = req.body;
-}
-var create_appraise_for_trainee = function(req, res, next) {
+var add_appraise = function(req, res, next) {
 
   var trainee_id = req.params.id;
   var current_appraise = req.body.appraise;
@@ -166,6 +161,36 @@ var create_appraise_for_trainee = function(req, res, next) {
 
       next(err);
     })
+};
+
+var update_appraises_by_id = function(req, res, next) {
+
+  var trainee_id = req.params.id;
+  var appraise = req.body;
+
+  console.log(trainee_id);
+  console.log(appraise);
+  appraise.appraiser = req.session.currentUserId;
+  have_appraised(trainee_id, appraise, function (result){
+    console.log(result);
+
+    if(result) {
+      console.log(result);
+    }
+  });
+
+  //Appraise.create(appraise)
+  //  .then(function (appraise) {
+  //
+  //    return Trainee.findById(trainee_id, function (err, trainee) {
+  //      trainee.appraises.push(appraise._id);
+  //      trainee.save();
+  //      res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
+  //    });
+  //  })
+  //  .onReject(function (err) {
+  //    next(err);
+  //  });
 };
 
 function have_appraised(trainee_id, appraise, callback) {
