@@ -14,6 +14,7 @@ router.get('/:id/trainees', function (req, res, next) {
     if (err) {
       next(err)
     }
+
     var result = [];
     trainees.forEach(function (trainee) {
       if (_.contains(trainee.group, groupId)) {
