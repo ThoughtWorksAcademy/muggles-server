@@ -78,7 +78,7 @@ module.exports = function (passport) {
   router.post('/', trainee_controller.create_trainee);
   router.get('/:id/appraise', trainee_controller.has_appraised);
   router.put('/:id/appraise', trainee_controller.add_appraise);
-
+  router.put('/appraises', trainee_controller.add_appraises);
   //router.put('/:id/appraise', function (req, res, next) {
   //
   //  var trainee_id = req.params.id;
