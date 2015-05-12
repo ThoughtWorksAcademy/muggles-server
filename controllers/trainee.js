@@ -14,28 +14,28 @@ var REGISTER_SUCCESS = '注册成功';
 var APPRAISE_ADD_SUCCESS = '添加评价成功';
 
 
-var get_trainee_by_id = function(req, res, next) {
+var get_trainee_by_id = function (req, res, next) {
 
   Trainee.findById(req.params.id)
     .populate('appraises')
     .populate('groups')
     .exec()
-    .then(function(trainee) {
+    .then(function (trainee) {
       return Group.populate(trainee, 'appraises.group');
     })
-    .then(function(trainee) {
+    .then(function (trainee) {
       return Trainer.populate(trainee, 'appraises.appraiser')
     })
-    .then(function(trainee) {
+    .then(function (trainee) {
       res.send({state: 200, data: trainee, message: TRAINEE_EXISTED})
     })
-    .onReject(function(err) {
+    .onReject(function (err) {
 
       next(err);
     })
 };
 
-var verify_trainee_by_email = function(req, res, next) {
+var verify_trainee_by_email = function (req, res, next) {
 
   var email = req.params.email;
   Trainee.findOne({email: email})
@@ -54,7 +54,7 @@ var verify_trainee_by_email = function(req, res, next) {
     })
 };
 
-var create_trainee = function(req, res, next) {
+var create_trainee = function (req, res, next) {
 
   var trainee = req.body;
 
@@ -68,7 +68,7 @@ var create_trainee = function(req, res, next) {
     })
 };
 
-var has_appraised = function(req, res, next) {
+var has_appraised = function (req, res, next) {
 
   var trainee_id = req.params.id;
   var current_appraise = req.body.appraise;
@@ -77,45 +77,45 @@ var has_appraised = function(req, res, next) {
   Trainee.findById(trainee_id)
     .populate('appraises')
     .exec()
-    .then(function(trainee) {
+    .then(function (trainee) {
 
       var new_trainee = trainee;
-      new_trainee.appraises = trainee.appraises.filter(function(appraise) {
+      new_trainee.appraises = trainee.appraises.filter(function (appraise) {
         return appraise.type === current_appraise.type && appraise.group === current_appraise.group;
       });
       return new_trainee;
     })
-    .then(function(trainee) {
+    .then(function (trainee) {
 
-      trainee.appraises.forEach(function(appraise) {
+      trainee.appraises.forEach(function (appraise) {
         appraise.appraised_date = date_util.format_date(appraise.appraised_date);
       });
       return trainee;
     })
-    .then(function(trainee) {
+    .then(function (trainee) {
 
-      var result = _.find(trainee.appraises, function(appraise) {
+      var result = _.find(trainee.appraises, function (appraise) {
         return appraise.appraised_date === current_appraise.appraised_date
       });
 
-      if(!result) {
+      if (!result) {
         res.send({state: 200, data: true, message: '已评价'})
       } else {
         res.send({state: 200, data: false, message: '还未评价'})
       }
     })
-    .onReject(function(err) {
+    .onReject(function (err) {
 
       next(err);
     })
 };
 
-var add_appraise = function(req, res, next) {
+var add_appraise = function (req, res, next) {
 
   var trainee_id = req.params.id;
   var appraise = req.body;
-
   appraise.appraiser = req.session.currentUserId;
+
   Appraise.create(appraise)
     .then(function (appraise) {
 

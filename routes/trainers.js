@@ -62,7 +62,7 @@ module.exports = function (passport) {
     req.session.currentUserId = null;
     req.session.currentUserName = null;
   });
-  
+
   router.post('/login', function (req, res, next) {
     passport.authenticate('trainer', function (err, user, info) {
       if (err) {
