@@ -79,56 +79,7 @@ module.exports = function (passport) {
   router.get('/:id/appraise', trainee_controller.has_appraised);
   router.put('/:id/appraise', trainee_controller.add_appraise);
   router.put('/appraises', trainee_controller.add_appraises);
-  //router.put('/:id/appraise', function (req, res, next) {
-  //
-  //  var trainee_id = req.params.id;
-  //  var appraise = req.body;
-  //  appraise.appraiser = req.session.currentUserId;
-  //
-  //  var have_appraised = false;
-  //  Trainee.findById(trainee_id)
-  //    .populate('appraises')
-  //    .exec()
-  //    .then(function (trainee) {
-  //      trainee.appraises.forEach(function (one) {
-  //        if (one.type === appraise.type && one.date === appraise.date) {
-  //          have_appraised = true;
-  //        }
-  //      });
-  //    })
-  //    .onReject(function (err) {
-  //      next(err);
-  //    });
-  //
-  //  if (have_appraised) {
-  //    res.send({state: 200, data: {}, message: APPRAISED_ALREADY});
-  //    return;
-  //  }
-  //
-  //  Appraise.create(appraise)
-  //    .then(function (appraise_entity) {
-  //      return Trainee.findById(trainee_id, function (err, trainee) {
-  //        trainee.appraises.push(appraise_entity._id);
-  //        trainee.save();
-  //        res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
-  //      });
-  //    })
-  //    .then(function (trainee) {
-  //
-  //      return Group.populate(trainee, 'appraises.group');
-  //    })
-  //    .then(function (trainee) {
-  //
-  //      return Trainer.populate(trainee, 'appraises.appraiser')
-  //    })
-  //    .then(function (trainee) {
-  //
-  //      //res.send({state: 200, data: trainee, message: ''})
-  //    })
-  //    .onReject(function (err) {
-  //      next(err);
-  //    });
-  //});
+
 
   return router;
 };

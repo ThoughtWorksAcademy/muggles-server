@@ -12,7 +12,7 @@ var Trainer = mongoose.model('Trainer');
 var TRAINEE_EXISTED = '学生存在';
 var REGISTER_SUCCESS = '注册成功';
 var APPRAISE_ADD_SUCCESS = '添加评价成功';
-
+var APPRAISED_ALREADY = '该学生评价已存在';
 
 var get_trainee_by_id = function (req, res, next) {
 
@@ -115,21 +115,93 @@ var add_appraise = function (req, res, next) {
   var trainee_id = req.params.id;
   var appraise = req.body;
   appraise.appraiser = req.session.currentUserId;
+  have_appraised(trainee_id, appraise, function (result){
+    console.log(result);
 
-  Appraise.create(appraise)
-    .then(function (appraise) {
+    if(result) {
+      console.log(result);
+    }
+  });
 
-      return Trainee.findById(trainee_id, function (err, trainee) {
-        trainee.appraises.push(appraise._id);
-        trainee.save();
-        res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
-      });
-    })
-    .onReject(function (err) {
-      next(err);
-    });
+  //Appraise.create(appraise)
+  //  .then(function (appraise) {
+  //
+  //    return Trainee.findById(trainee_id, function (err, trainee) {
+  //      trainee.appraises.push(appraise._id);
+  //      trainee.save();
+  //      res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
+  //    });
+  //  })
+  //  .onReject(function (err) {
+  //    next(err);
+  //  });
 };
 
+function have_appraised(trainee_id, appraise, callback) {
+  var result = false;
+  return Trainee.findById(trainee_id)
+    .populate('appraises')
+    .exec()
+    .then(function (trainee) {
+      trainee.appraises.forEach(function (one) {
+        if(one.type === appraise.type && one.date === appraise.date && appraise.group === one.group) {
+          result =  true;
+          callback(result);
+          return result;
+        }
+      });
+    });
+}
+//router.put('/:id/appraise', function (req, res, next) {
+//
+//  var trainee_id = req.params.id;
+//  var appraise = req.body;
+//  appraise.appraiser = req.session.currentUserId;
+//
+//  var have_appraised = false;
+//  Trainee.findById(trainee_id)
+//    .populate('appraises')
+//    .exec()
+//    .then(function (trainee) {
+//      trainee.appraises.forEach(function (one) {
+//        if (one.type === appraise.type && one.date === appraise.date) {
+//          have_appraised = true;
+//        }
+//      });
+//    })
+//    .onReject(function (err) {
+//      next(err);
+//    });
+//
+//  if (have_appraised) {
+//    res.send({state: 200, data: {}, message: APPRAISED_ALREADY});
+//    return;
+//  }
+//
+//  Appraise.create(appraise)
+//    .then(function (appraise_entity) {
+//      return Trainee.findById(trainee_id, function (err, trainee) {
+//        trainee.appraises.push(appraise_entity._id);
+//        trainee.save();
+//        res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
+//      });
+//    })
+//    .then(function (trainee) {
+//
+//      return Group.populate(trainee, 'appraises.group');
+//    })
+//    .then(function (trainee) {
+//
+//      return Trainer.populate(trainee, 'appraises.appraiser')
+//    })
+//    .then(function (trainee) {
+//
+//      //res.send({state: 200, data: trainee, message: ''})
+//    })
+//    .onReject(function (err) {
+//      next(err);
+//    });
+//});
 var add_appraises = function (req, res, next) {
   var appraiser = req.session.currentUserId;
   var appraised_date = req.body.appraise.appraised_date;
