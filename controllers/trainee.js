@@ -142,11 +142,9 @@ var add_appraise = function(req, res, next) {
       });
 
       if(!result) {
-        next();
-        //res.send({state: 200, data: true, message: '已评价'})
+        res.send({state: 200, data: true, message: APPRAISED_ALREADY})
       } else {
         return Appraise.create(current_appraise);
-        //res.send({state: 200, data: false, message: '还未评价'})
       }
     })
     .then(function(appraise) {
@@ -158,7 +156,6 @@ var add_appraise = function(req, res, next) {
       });
     })
     .onReject(function(err) {
-
       next(err);
     })
 };
