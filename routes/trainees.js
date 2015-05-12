@@ -82,8 +82,7 @@ module.exports = function (passport) {
   router.get('/verification/:email', trainee_controller.verify_trainee_by_email);
   router.post('/', trainee_controller.create_trainee);
   router.post('/:id/appraise', trainee_controller.has_appraised);
-  router.put('/；id/appraise', trainee_controller.update_appraises_by_id);
-  
+  router.put('/:id/appraise', trainee_controller.update_appraises_by_id);
 
   router.put('/appraises', function (req, res, next) {
     var appraiser = req.session.currentUserId;
