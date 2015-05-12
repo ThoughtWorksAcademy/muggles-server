@@ -1,6 +1,5 @@
 'use strict';
 var _ = require('lodash');
-var moment = require('moment');
 var mongoose = require('mongoose');
 var express = require('express');
 var router = express.Router();
@@ -14,10 +13,6 @@ var Trainer = mongoose.model('Trainer');
 var Course = mongoose.model('Course');
 
 var trainee_controller = require('../controllers/trainee');
-
-var APPRAISE_ADD_SUCCESS = '添加评价成功';
-var APPRAISED_ALREADY = '此学生该条评价已存在';
-
 
 module.exports = function (passport) {
 
