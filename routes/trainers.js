@@ -47,8 +47,8 @@ module.exports = function (passport) {
           return res.send({state: 401, data: true, message: LOGIN_FAILURE});
         }
 
-        session.currentUserId = user._id;
-        session.currentUserName = user.username;
+        session.currentTrainerId = user._id;
+        session.currentTrainerName = user.username;
 
         res.send({state: 200, data: false, message: LOGIN_SUCCESS});
       })
@@ -61,10 +61,8 @@ module.exports = function (passport) {
   router.delete('/', function (req, res) {
     req.session.currentUserId = null;
     req.session.currentUserName = null;
-
-    res.send({state: 200, data: {}, message: LOGOUT_SUCCESS});
   });
-
+  
   router.post('/login', function (req, res, next) {
     passport.authenticate('trainer', function (err, user, info) {
       if (err) {
