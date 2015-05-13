@@ -12,7 +12,7 @@ var Trainer = mongoose.model('Trainer');
 var TRAINEE_EXISTED = '学生存在';
 var REGISTER_SUCCESS = '注册成功';
 var APPRAISE_ADD_SUCCESS = '添加评价成功';
-var APPRAISED_ALREADY = '该学生评价已存在';
+var APPRAISED_ALREADY = '此条评价已存在已评价';
 
 var get_trainee_by_id = function (req, res, next) {
 
@@ -128,7 +128,7 @@ var add_appraise = function (req, res, next) {
     .then(function (result) {
       if (result) {
 
-        res.send({state: 200, data: false, message: '此条评价已存在已评价'});
+        res.send({state: 200, data: false, message: APPRAISED_ALREADY});
       } else {
 
         Appraise.create(appraise)
