@@ -75,8 +75,9 @@ module.exports = function (passport) {
 
   router.get('/:id', trainee_controller.get_trainee_by_id);
   router.get('/verification/:email', trainee_controller.verify_trainee_by_email);
-  router.post('/', trainee_controller.create_trainee);
   router.get('/:id/appraise', trainee_controller.has_appraised);
+  router.post('/', trainee_controller.create_trainee);
+  router.post('/:id/appraise', trainee_controller.has_appraised);
   router.put('/:id/appraise', trainee_controller.add_appraise);
   router.put('/appraises', trainee_controller.add_appraises);
 
