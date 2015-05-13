@@ -97,7 +97,7 @@ var update_appraise = function(req, res, next) {
       res.send({state: 200, data: appraise, message: '修改成功'})
     })
     .onReject(function(err) {
-        next(err);
+      next(err);
     });
 };
 
