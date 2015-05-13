@@ -67,6 +67,7 @@ var create_trainee = function (req, res, next) {
       next(err);
     })
 };
+
 var has_appraised = function(req, res, next) {
 
   var trainee_id = req.params.id;
@@ -128,14 +129,30 @@ var add_appraise = function(req, res, next) {
   var appraise = req.body;
 
   appraise.appraiser = req.session.currentUserId;
-  Appraise.create(appraise)
-    .then(function (appraise) {
-
-      return Trainee.findById(trainee_id, function (err, trainee) {
-        trainee.appraises.push(appraise._id);
-        trainee.save();
-        res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
+  Trainee.findById(trainee_id)
+    .populate('appraises')
+    .exec()
+    .then(function (trainee) {
+      return _.find(trainee.appraises, function (one) {
+        console.log(date_util.find_formated_date(one) === date_util.find_formated_date(appraise));
+        return (date_util.find_formated_date(one) === date_util.find_formated_date(appraise) && one.type === appraise.type && one.group === appraise.group);
       });
+    })
+    .then(function (result) {
+      if (result) {
+
+        res.send({state: 200, data: false, message: '此条评价已存在已评价'});
+      } else {
+
+        Appraise.create(appraise)
+        .then(function (appraise) {
+            Trainee.findById(trainee_id, function (err, trainee) {
+              trainee.appraises.push(appraise._id);
+              trainee.save();
+              res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
+            })
+          });
+      }
     })
     .onReject(function (err) {
       next(err);
