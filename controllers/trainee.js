@@ -101,7 +101,6 @@ var update_appraise = function(req, res, next) {
     });
 };
 
-
 var add_appraise = function(req, res, next) {
 
   var trainee_id = req.params.id;
