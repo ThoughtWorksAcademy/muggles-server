@@ -134,7 +134,6 @@ var add_appraise = function (req, res, next) {
     .exec()
     .then(function (trainee) {
       return _.find(trainee.appraises, function (one) {
-        console.log(date_util.find_formated_date(one) === date_util.find_formated_date(appraise));
         return (date_util.find_formated_date(one) === date_util.find_formated_date(appraise) && one.type === appraise.type && one.group === appraise.group);
       });
     })
@@ -176,7 +175,6 @@ var add_appraises = function (req, res, next) {
       .exec()
       .then(function (trainee) {
         return _.find(trainee.appraises, function (one) {
-          console.log(date_util.find_formated_date(one) === date_util.find_formated_date(appraise));
           return (date_util.find_formated_date(one) === date_util.find_formated_date(appraise) && one.type === appraise.type && one.group === appraise.group);
         });
       })
