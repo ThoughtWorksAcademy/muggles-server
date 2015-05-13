@@ -5,8 +5,6 @@ var moment = require('moment');
 var DAY = '日';
 var WEEK = '周';
 var MONTH = '月';
-var SEASON = '夏';
-var SEASON_TYPE = '夏季';
 
 var format_date = function(appraise) {
 
