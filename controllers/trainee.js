@@ -115,20 +115,22 @@ var add_appraise = function (req, res, next) {
   var trainee_id = req.params.id;
   var appraise = req.body;
   appraise.appraiser = req.session.currentUserId;
-  //appraise.appraised_date = date_util.format_date(appraise);
 
   Trainee.findById(trainee_id)
     .populate('appraises')
     .exec()
     .then(function (trainee) {
       return _.find(trainee.appraises, function (one) {
-        return (date_util.find_formated_date(one.appraised_date) === date_util.find_formated_date(appraise.appraised_date) && one.type === appraise.type && one.group === appraise.group);
+        console.log(date_util.find_formated_date(one) === date_util.find_formated_date(appraise));
+        return (date_util.find_formated_date(one) === date_util.find_formated_date(appraise) && one.type === appraise.type && one.group === appraise.group);
       });
     })
     .then(function (result) {
       if (result) {
-        res.send({state: 200, data: true, message: '已评价'});
+
+        res.send({state: 200, data: false, message: '此条评价已存在已评价'});
       } else {
+
         Appraise.create(appraise)
         .then(function (appraise) {
             Trainee.findById(trainee_id, function (err, trainee) {

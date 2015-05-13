@@ -27,7 +27,7 @@ var format_date = function(appraise) {
 var find_formated_date = function (appraise) {
   if(appraise.type === DAY) {
 
-    return moment(appraise.appraised_date).format('YYYY-MM- HH:mm:ss');
+    return moment(appraise.appraised_date).format('YYYY-MM-dd');
   } else if(appraise.type === WEEK) {
 
     return moment(appraise.appraised_date).format('W');
