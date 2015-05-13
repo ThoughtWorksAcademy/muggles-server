@@ -67,8 +67,7 @@ var create_trainee = function (req, res, next) {
       next(err);
     })
 };
-
-var has_appraised = function (req, res, next) {
+var has_appraised = function(req, res, next) {
 
   var trainee_id = req.params.id;
   var current_appraise = req.body.appraise;
@@ -76,7 +75,7 @@ var has_appraised = function (req, res, next) {
   Trainee.findById(trainee_id)
     .populate('appraises')
     .exec()
-    .then(function (trainee) {
+    .then(function(trainee) {
 
       var new_trainee = trainee;
       new_trainee.appraises = trainee.appraises.filter(function(appraise) {
@@ -85,22 +84,42 @@ var has_appraised = function (req, res, next) {
 
       return new_trainee;
     })
-    .then(function (trainee) {
+    .then(function(trainee) {
 
       var result = _.find(trainee.appraises, function(appraise) {
         return date_util.format_date(appraise) === date_util.format_date(current_appraise);
       });
 
-      if (!result) {
+      if(result) {
         res.send({state: 200, data: true, message: '已评价'})
       } else {
         res.send({state: 200, data: false, message: '还未评价'})
       }
     })
-    .onReject(function (err) {
+    .onReject(function(err) {
 
       next(err);
     })
+};
+
+var update_appraise_by_id = function(req, res, next) {
+
+  var trainee_id = req.params.id;
+  var appraise = req.body;
+
+  appraise.appraiser = req.session.currentUserId;
+  Appraise.create(appraise)
+    .then(function (appraise) {
+
+      return Trainee.findById(trainee_id, function (err, trainee) {
+        trainee.appraises.push(appraise._id);
+        trainee.save();
+        res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
+      });
+    })
+    .onReject(function (err) {
+      next(err);
+    });
 };
 
 var add_appraise = function(req, res, next) {
@@ -150,6 +169,7 @@ module.exports = {
   verify_trainee_by_email: verify_trainee_by_email,
   create_trainee: create_trainee,
   has_appraised: has_appraised,
+  update_appraise_by_id: update_appraise_by_id,
   add_appraise: add_appraise,
   add_appraises: add_appraises
 };
