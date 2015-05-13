@@ -25,18 +25,21 @@ var format_date = function(appraise) {
 };
 
 var find_formated_date = function (appraise) {
+  var date = {};
   if(appraise.type === DAY) {
 
-    return moment(appraise.appraised_date).format('YYYY-MM-dd');
+    date = moment(appraise.appraised_date).format('YYYY-MM-dd');
   } else if(appraise.type === WEEK) {
 
-    return moment(appraise.appraised_date).format('W');
+    date = moment(appraise.appraised_date).format('W');
   } else if(appraise.type === MONTH) {
 
-    return moment(appraise.appraised_date).format('YYYY-MM');
+    date =  moment(appraise.appraised_date).format('YYYY-MM');
   } else {
-    return moment(appraise.appraised_date).format('YYYY-MM');
+    
+    date = moment(appraise.appraised_date).format('YYYY-MM');
   }
+  return date;
 };
 
 module.exports = {
