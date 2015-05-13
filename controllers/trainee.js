@@ -73,6 +73,44 @@ var has_appraised = function(req, res, next) {
   var trainee_id = req.params.id;
   var current_appraise = req.body.appraise;
 
+  console.log(current_appraise);
+  Trainee.findById(trainee_id)
+    .populate('appraises')
+    .exec()
+    .then(function(trainee) {
+
+      return _.find(trainee.appraises, function(appraise) {
+
+        var is_the_same_day = (date_util.format_date(appraise) === date_util.format_date(current_appraise));
+        var is_the_same_group = (appraise.group.toString() === current_appraise.group);
+        var is_the_same_type = (appraise.type === current_appraise.type);
+        return is_the_same_day && is_the_same_group && is_the_same_type;
+      });
+    })
+    .then(function(appraise) {
+
+      console.log(appraise);
+      return Appraise.findById(appraise.id).exec();
+    })
+    .then(function(appraise) {
+
+      console.log(appraise);
+      appraise.comment = current_appraise.comment;
+      appraise.save();
+      console.log(appraise.comment);
+      res.send({state: 200, data: appraise, message: '修改成功'})
+    })
+    .onReject(function(err) {
+        next(err);
+    });
+};
+
+var update_appraise_by_id = function(req, res, next) {
+
+  var trainee_id = req.params.id;
+  var current_appraise = req.body;
+  current_appraise.appraiser = req.session.currentUserId || '';
+
   Trainee.findById(trainee_id)
     .populate('appraises')
     .exec()
@@ -92,33 +130,21 @@ var has_appraised = function(req, res, next) {
       });
 
       if(result) {
-        res.send({state: 200, data: true, message: '已评价'})
+        res.send({state: 200, data: true, message: APPRAISED_ALREADY})
       } else {
-        res.send({state: 200, data: false, message: '还未评价'})
+        Appraise.create(current_appraise)
+          .then(function (appraise) {
+
+            return Trainee.findById(trainee_id, function (err, trainee) {
+              trainee.appraises.push(appraise._id);
+              trainee.save();
+              res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
+            });
+          })
       }
     })
     .onReject(function(err) {
 
-      next(err);
-    })
-};
-
-var update_appraise_by_id = function(req, res, next) {
-
-  var trainee_id = req.params.id;
-  var appraise = req.body;
-
-  appraise.appraiser = req.session.currentUserId;
-  Appraise.create(appraise)
-    .then(function (appraise) {
-
-      return Trainee.findById(trainee_id, function (err, trainee) {
-        trainee.appraises.push(appraise._id);
-        trainee.save();
-        res.send({state: 200, data: trainee, message: APPRAISE_ADD_SUCCESS});
-      });
-    })
-    .onReject(function (err) {
       next(err);
     });
 };
