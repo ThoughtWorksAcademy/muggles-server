@@ -68,7 +68,7 @@ var create_trainee = function (req, res, next) {
     })
 };
 
-var has_appraised = function(req, res, next) {
+var has_appraised = function (req, res, next) {
 
   var trainee_id = req.params.id;
   var current_appraise = req.body.appraise;
@@ -76,34 +76,34 @@ var has_appraised = function(req, res, next) {
   Trainee.findById(trainee_id)
     .populate('appraises')
     .exec()
-    .then(function(trainee) {
+    .then(function (trainee) {
 
       var new_trainee = trainee;
-      new_trainee.appraises = trainee.appraises.filter(function(appraise) {
+      new_trainee.appraises = trainee.appraises.filter(function (appraise) {
         return appraise.type === current_appraise.type && appraise.group.toString() === current_appraise.group;
       });
 
       return new_trainee;
     })
-    .then(function(trainee) {
+    .then(function (trainee) {
 
-      var result = _.find(trainee.appraises, function(appraise) {
+      var result = _.find(trainee.appraises, function (appraise) {
         return date_util.format_date(appraise) === date_util.format_date(current_appraise);
       });
 
-      if(result) {
+      if (result) {
         res.send({state: 200, data: true, message: '已评价'})
       } else {
         res.send({state: 200, data: false, message: '还未评价'})
       }
     })
-    .onReject(function(err) {
+    .onReject(function (err) {
 
       next(err);
     })
 };
 
-var update_appraise_by_id = function(req, res, next) {
+var update_appraise_by_id = function (req, res, next) {
 
   var trainee_id = req.params.id;
   var appraise = req.body;
@@ -123,7 +123,7 @@ var update_appraise_by_id = function(req, res, next) {
     });
 };
 
-var add_appraise = function(req, res, next) {
+var add_appraise = function (req, res, next) {
 
   var trainee_id = req.params.id;
   var appraise = req.body;
@@ -145,7 +145,7 @@ var add_appraise = function(req, res, next) {
       } else {
 
         Appraise.create(appraise)
-        .then(function (appraise) {
+          .then(function (appraise) {
             Trainee.findById(trainee_id, function (err, trainee) {
               trainee.appraises.push(appraise._id);
               trainee.save();
@@ -164,19 +164,39 @@ var add_appraises = function (req, res, next) {
   var appraised_date = req.body.appraise.appraised_date;
   var type = req.body.appraise.type;
   var trainees = req.body.trainees;
-  trainees.forEach(function (trainee) {
-    trainee.appraise.appraised_date = appraised_date;
-    trainee.appraise.type = type;
-    trainee.appraise.appraiser = appraiser;
+  var result = [];
 
-    Appraise.create(trainee.appraise)
-      .then(function (appraise) {
-        return Trainee.findById(trainee._id, function (err, trainee) {
-          //TODO 根据type和date检查唯一性，即应该再次判断该学生是否已经添加了此种类型的当天评价
-          trainee.appraises.push(appraise._id);
-          trainee.save();
-        })
+  trainees.forEach(function (current_trainee) {
+    current_trainee.appraise.appraised_date = appraised_date;
+    current_trainee.appraise.type = type;
+    current_trainee.appraise.appraiser = appraiser;
+
+    Trainee.findById(current_trainee._id)
+      .populate('appraises')
+      .exec()
+      .then(function (trainee) {
+        return _.find(trainee.appraises, function (one) {
+          console.log(date_util.find_formated_date(one) === date_util.find_formated_date(appraise));
+          return (date_util.find_formated_date(one) === date_util.find_formated_date(appraise) && one.type === appraise.type && one.group === appraise.group);
+        });
       })
+      .then(function (result) {
+        if (result) {
+          current_trainee.is_appraised = true;
+        } else {
+          current_trainee.is_appraised = false;
+          Appraise.create(current_trainee.appraise)
+            .then(function (appraise) {
+              return Trainee.findById(trainee._id, function (err, trainee) {
+                trainee.appraises.push(appraise._id);
+                trainee.save();
+              });
+            });
+        }
+      })
+      .onReject(function (err) {
+        next(err);
+      });
   });
   res.send({state: 200, data: trainees, message: APPRAISE_ADD_SUCCESS});
 };
