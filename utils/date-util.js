@@ -24,6 +24,22 @@ var format_date = function(appraise) {
     }
 };
 
+var find_formated_date = function (appraise) {
+  if(appraise.type === DAY) {
+
+    return moment(appraise.appraised_date).format('YYYY-MM- HH:mm:ss');
+  } else if(appraise.type === WEEK) {
+
+    return moment(appraise.appraised_date).format('W');
+  } else if(appraise.type === MONTH) {
+
+    return moment(appraise.appraised_date).format('YYYY-MM');
+  } else {
+    return moment(appraise.appraised_date).format('YYYY-MM');
+  }
+};
+
 module.exports = {
-  format_date: format_date
+  format_date: format_date,
+  find_formated_date: find_formated_date
 };
