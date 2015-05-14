@@ -18,7 +18,9 @@ describe('cart', function () {
 
     it('should get trainee by the id of trainee', function (done) {
 
-      req_mock.params.id = '550249080bf4a43115ef2dae';
+      req_mock.params = {
+        id : '550249080bf4a43115ef2dae'
+      };
       res_mock.send = function (object) {
 
         expect(object.state).to.equal(200);

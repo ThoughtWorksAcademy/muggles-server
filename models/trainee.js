@@ -6,7 +6,7 @@ var TraineeSchema = new Schema({
   email: String,
   password: String,
   gender: String,
-  create_date: Date,
+  create_date: {type: Date, default: Date.now},
   image: String,
   github: String,
   phone_number: String,

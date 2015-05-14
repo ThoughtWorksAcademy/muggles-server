@@ -17,35 +17,36 @@ var appraises = require('../../seeds/test/appraises');
 
 var tasks = [
   {operate: InvitationCode, seed: {}},
-  {operate: Trainee, seed: {}},
   {operate: Trainer, seed: {}},
   {operate: Group, seed: {}},
-  {operate: Appraise, seed: {}}
+  {operate: Appraise, seed: {}},
+  {operate: Trainee, seed: {}}
 ];
 
-var createTasks = [
+var create_tasks = [
   {operate: InvitationCode, seed: invitationCodes},
-  {operate: Trainee, seed: trainees},
   {operate: Trainer, seed: trainers},
   {operate: Group, seed: groups},
-  {operate: Appraise, seed: appraises}
+  {operate: Appraise, seed: appraises},
+  {operate: Trainee, seed: trainees}
 ];
 
 var reloadDatabase = function (done) {
-  var taskLen = tasks.length;
-  var createTaskLen = createTasks.length;
+
+  var task_length = tasks.length;
+  var create_task_length = create_tasks.length;
 
   tasks.forEach(function(task) {
 
     task.operate.remove(task.seed, function() {
 
-      if(0 === --taskLen) {
+      if(0 === --task_length) {
 
-        createTasks.forEach(function(task) {
+        create_tasks.forEach(function(create_task) {
 
-          task.operate.create(task.seed, function() {
+          create_task.operate.create(create_task.seed, function() {
 
-            if(0 === --createTaskLen) {
+            if(0 === --create_task_length) {
               done();
             }
           });

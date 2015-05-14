@@ -9,7 +9,7 @@ var AppraiseSchema = new Schema({
   group: {type: Schema.ObjectId, ref: 'Group'},
   comment: String,
   appraised_date: Date,
-  create_date: Date,
+  create_date: {type: Date ,default: Date.now},
   type: String
 });
 

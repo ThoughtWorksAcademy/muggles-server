@@ -71,7 +71,6 @@ if (app.get('env') === 'production') {
 
   app.set('port', 80);
 
-
   //app.use(express.static(path.join(__dirname, '/dist')));
   app.use(express.static(path.join(__dirname, '../../../client/current')));
   // This covers serving up the index page
