@@ -17,7 +17,7 @@ fs.readdirSync(__dirname + '/models').forEach(function (file) {
 });
 
 var app = express();
-var port = process.env.PORT || 3001;
+var port = process.env.PORT || 3030;
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
