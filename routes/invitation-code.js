@@ -11,7 +11,7 @@ var InvitationCode = mongoose.model('InvitationCode');
 
 router.get('/:content', function (req, res, next) {
 
-  let content = req.params.content;
+  var content = req.params.content;
   InvitationCode.findOne({content: content})
     .exec()
     .then(function (invitation) {
