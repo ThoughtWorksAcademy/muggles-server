@@ -57,7 +57,7 @@ if (app.get('env') === 'development') {
   // This covers serving up the index page
   app.use(express.static(path.join(__dirname, '../muggles-client/.tmp')));
   app.use(express.static(path.join(__dirname, '../muggles-client/app')));
-  app.use(express.static(path.join(__dirname, '../muggles-client/app/views')));
+  //app.use(express.static(path.join(__dirname, '../muggles-client/app/views')));
 
   app.use(function (err, req, res, next) {
     res.status(err.status || 500);
