@@ -72,12 +72,19 @@ if (app.get('env') === 'production') {
 
   app.set('port', 80);
 
+  //console.log(__dirname);
+  //app.use(express.static(path.join(__dirname, '../muggles-client')));
+  //// This covers serving up the index page
+  //app.use(express.static(path.join(__dirname, '../muggles-client/.tmp')));
+  //app.use(express.static(path.join(__dirname, '../muggles-client/app')));
+  //app.use(express.static(path.join(__dirname, '../muggles-client/app/views')));
+
   //app.use(express.static(path.join(__dirname, '/dist')));
-  app.use(express.static(path.join(__dirname, '../../client/current')));
+  app.use(express.static(path.join(__dirname, '../../../client/current')));
   // This covers serving up the index page
-  app.use(express.static(path.join(__dirname, '../../client/current/.tmp')));
-  app.use(express.static(path.join(__dirname, '../../client/current/app')));
-  app.use(express.static(path.join(__dirname, '../../client/current/app/views')));
+  app.use(express.static(path.join(__dirname, '../../../client/current/.tmp')));
+  app.use(express.static(path.join(__dirname, '../../../client/current/app')));
+  app.use(express.static(path.join(__dirname, '../../../client/current/app/views')));
 
   app.use(function (err, req, res, next) {
     res.status(err.status || 500);
