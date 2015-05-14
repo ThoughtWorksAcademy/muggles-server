@@ -9,7 +9,7 @@ var Trainer = mongoose.model('Trainer');
 var Group = mongoose.model('Group');
 var Appraise = mongoose.model('Appraise');
 
-var invitationCodes =  require('../../seeds/test/invitation-codes');
+var invitation_codes =  require('../../seeds/test/invitation-codes');
 var trainees = require('../../seeds/test/trainees');
 var trainers = require('../../seeds/test/trainers');
 var groups = require('../../seeds/test/groups');
@@ -17,35 +17,38 @@ var appraises = require('../../seeds/test/appraises');
 
 var tasks = [
   {operate: InvitationCode, seed: {}},
-  {operate: Trainee, seed: {}},
-  {operate: Trainer, seed: {}},
   {operate: Group, seed: {}},
-  {operate: Appraise, seed: {}}
+  {operate: Trainer, seed: {}},
+  {operate: Appraise, seed: {}},
+  {operate: Trainee, seed: {}}
 ];
 
-var createTasks = [
-  {operate: InvitationCode, seed: invitationCodes},
-  {operate: Trainee, seed: trainees},
-  {operate: Trainer, seed: trainers},
+var create_tasks = [
+  {operate: InvitationCode, seed: invitation_codes},
   {operate: Group, seed: groups},
-  {operate: Appraise, seed: appraises}
+  {operate: Trainer, seed: trainers},
+  {operate: Appraise, seed: appraises},
+  {operate: Trainee, seed: trainees}
 ];
 
 var reloadDatabase = function (done) {
-  var taskLen = tasks.length;
-  var createTaskLen = createTasks.length;
+  var task_length = tasks.length;
+  var create_task_Length = create_tasks.length;
 
   tasks.forEach(function(task) {
 
     task.operate.remove(task.seed, function() {
 
-      if(0 === --taskLen) {
+      if(0 === --task_length) {
 
-        createTasks.forEach(function(task) {
+        create_tasks.forEach(function(create_task) {
 
-          task.operate.create(task.seed, function() {
+          create_task.operate.create(create_task.seed, function(err) {
 
-            if(0 === --createTaskLen) {
+            if(err) {
+              console.log(err);
+            }
+            if(0 === --create_task_Length) {
               done();
             }
           });

@@ -2,18 +2,9 @@
 
 var express = require('express');
 var router = express.Router();
+var trainer_controller = require('../models/trainer');
 
-router.get('/', function (req, res) {
-  var currentTrainerName = req.session.currentTrainerName;
-
-  res.send(currentTrainerName);
-});
-
-router.delete('/', function (req, res) {
-  req.session.currentTrainerId = null;
-  req.session.currentTrainerName = null;
-
-  res.send({state: 200, data: {}});
-});
+router.get('/', trainer_controller.login);
+router.delete('/', trainer_controller.logout);
 
 module.exports = router;
