@@ -17,7 +17,7 @@ fs.readdirSync(__dirname + '/models').forEach(function (file) {
 });
 
 var app = express();
-var port = process.env.PORT || 3030;
+//var port = process.env.PORT || 3030;
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -50,6 +50,9 @@ router(app, passport);
 //});
 
 if (app.get('env') === 'development') {
+
+  app.set('port', 3030);
+
   app.use(express.static(path.join(__dirname, '../muggles-client')));
   // This covers serving up the index page
   app.use(express.static(path.join(__dirname, '../muggles-client/.tmp')));
@@ -66,7 +69,15 @@ if (app.get('env') === 'development') {
 }
 
 if (app.get('env') === 'production') {
-  app.use(express.static(path.join(__dirname, '/dist')));
+
+  app.set('port', 80);
+
+  //app.use(express.static(path.join(__dirname, '/dist')));
+  app.use(express.static(path.join(__dirname, '../../client/current')));
+  // This covers serving up the index page
+  app.use(express.static(path.join(__dirname, '../../client/current/.tmp')));
+  app.use(express.static(path.join(__dirname, '../../client/current/app')));
+  app.use(express.static(path.join(__dirname, '../../client/current/app/views')));
 
   app.use(function (err, req, res, next) {
     res.status(err.status || 500);
@@ -76,6 +87,6 @@ if (app.get('env') === 'production') {
     });
   });
 }
-console.log('Express app started on port ' + port);
+//console.log('Express app started on port ' + port);
 
 module.exports = app;
