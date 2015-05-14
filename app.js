@@ -17,7 +17,6 @@ fs.readdirSync(__dirname + '/models').forEach(function (file) {
 });
 
 var app = express();
-//var port = process.env.PORT || 3030;
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -72,12 +71,6 @@ if (app.get('env') === 'production') {
 
   app.set('port', 80);
 
-  //console.log(__dirname);
-  //app.use(express.static(path.join(__dirname, '../muggles-client')));
-  //// This covers serving up the index page
-  //app.use(express.static(path.join(__dirname, '../muggles-client/.tmp')));
-  //app.use(express.static(path.join(__dirname, '../muggles-client/app')));
-  //app.use(express.static(path.join(__dirname, '../muggles-client/app/views')));
 
   //app.use(express.static(path.join(__dirname, '/dist')));
   app.use(express.static(path.join(__dirname, '../../../client/current')));
@@ -94,6 +87,5 @@ if (app.get('env') === 'production') {
     });
   });
 }
-//console.log('Express app started on port ' + port);
 
 module.exports = app;
