@@ -183,6 +183,41 @@ var add_appraises = function (req, res, next) {
   res.send({state: 200, data: trainees, message: APPRAISE_ADD_SUCCESS});
 };
 
+var add_appraises_date = function (trainees, type, callback) {
+
+  trainees.forEach(function (current_trainee) {
+    current_trainee.appraise.appraised_date = appraised_date;
+    current_trainee.appraise.type = type;
+    current_trainee.appraise.appraiser = appraiser;
+
+    Trainee.findById(current_trainee._id)
+      .populate('appraises')
+      .exec()
+      .then(function (trainee) {
+        return _.find(trainee.appraises, function (one) {
+          return (date_util.find_formated_date(one) === date_util.find_formated_date(appraise) && one.type === appraise.type && one.group === appraise.group);
+        });
+      })
+      .then(function (result) {
+        if (result) {
+          current_trainee.is_appraised = true;
+        } else {
+          current_trainee.is_appraised = false;
+          Appraise.create(current_trainee.appraise)
+            .then(function (appraise) {
+              return Trainee.findById(trainee._id, function (err, trainee) {
+                trainee.appraises.push(appraise._id);
+                trainee.save();
+              });
+            });
+        }
+      })
+      .onReject(function (err) {
+        next(err);
+      });
+  });
+};
+
 module.exports = {
   get_trainee_by_id: get_trainee_by_id,
   verify_trainee_by_email: verify_trainee_by_email,
