@@ -1,14 +1,13 @@
 'use strict';
 
 var _ = require('lodash');
-var date_util = require('../utils/date-util');
-
 var mongoose = require('mongoose');
 
-var Trainee = mongoose.model('Trainee');
-var invitation_code = mongoose.model('InvitationCode');
+var InvitationCode = mongoose.model('InvitationCode');
+var CORRECT_CODE = '邀请码正确';
+var ERROR_CODE = '邀请码错误';
 
-var get_invitations = function (req, res, next) {
+var get_invitation_by_content = function (req, res, next) {
 
   var content = req.params.content;
   InvitationCode.findOne({content: content})
@@ -30,5 +29,5 @@ var get_invitations = function (req, res, next) {
 
 
 module.exports = {
-  get_invitations: get_invitations,
+  get_invitation_by_content: get_invitation_by_content
 };
