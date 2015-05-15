@@ -14,7 +14,7 @@ var get_current_trainer_name = function (req, res) {
   res.send({state: 200, data: currentTrainerName, message: ''});
 };
 
-var login = function(req, res, next) {
+var create = function(req, res, next) {
   var email = req.body.user.email;
   var password = req.body.user.password;
   var session = req.session;
@@ -37,7 +37,7 @@ var login = function(req, res, next) {
     })
 };
 
-var logout = function(req, res) {
+var destroy = function(req, res) {
   req.session.currentTrainerId = null;
   req.session.currentTrainerName = null;
 
@@ -46,6 +46,6 @@ var logout = function(req, res) {
 
 module.exports = {
   get_current_trainer_name: get_current_trainer_name,
-  login: login,
-  logout: logout
+  create: create,
+  destroy: destroy
 };
