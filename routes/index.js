@@ -5,7 +5,7 @@ module.exports = function (app, passport) {
   app.use('/api/courses', require('./courses'));
   app.use('/api/trainers', require('./trainers')(passport));
   app.use('/api/checkpoints', require('./checkpoints'));
-  app.use('/api/invitation', require('./invitation-code'))
-  app.use('/api/groups', require('./groups'))
+  app.use('/api/invitation', require('./invitation-code'));
+  app.use('/api/groups', require('./groups'));
   app.use('/api/sessions', require('./sessions'))
 };

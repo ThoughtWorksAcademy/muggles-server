@@ -3,12 +3,10 @@
 var express = require('express');
 var router = express.Router();
 
-var session_controller = require('../controllers/session');
+var session_controller = require('../controllers/sessions');
 
-router.get('/', session_controller.get_current_name);
-
-router.post('/login', session_controller.create);
-
-router.delete('/', session_controller.destroy);
+router.get('/', session_controller.get_current_trainer_name);
+router.post('/login', session_controller.login);
+router.delete('/', session_controller.logout);
 
 module.exports = router;
