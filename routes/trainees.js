@@ -79,7 +79,7 @@ module.exports = function (passport) {
   router.post('/:id/appraise', trainee_controller.update_appraise);
   router.put('/:id/appraise', trainee_controller.add_appraise);
   router.put('/appraises', trainee_controller.add_appraises);
-
+  router.post('/appraise', trainee_controller.is_appraised);
 
   return router;
 };
