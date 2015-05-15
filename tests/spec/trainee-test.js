@@ -3,7 +3,7 @@
 describe('trainee_controller', function () {
   var req_mock;
   var res_mock;
-  var trainee_controller = require('../../controllers/trainee');
+  var trainee_controller = require('../../controllers/trainees');
 
   beforeEach(function () {
     req_mock = {};

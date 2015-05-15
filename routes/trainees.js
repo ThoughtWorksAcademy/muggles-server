@@ -12,7 +12,7 @@ var Group = mongoose.model('Group');
 var Trainer = mongoose.model('Trainer');
 var Course = mongoose.model('Course');
 
-var trainee_controller = require('../controllers/trainee');
+var trainee_controller = require('../controllers/trainees');
 
 module.exports = function (passport) {
 

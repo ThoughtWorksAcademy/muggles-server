@@ -3,7 +3,7 @@
 describe('invitation_code_controller', function () {
   var req_mock;
   var res_mock;
-  var invitation_code_controller = require('../../controllers/invitation-code');
+  var invitation_code_controller = require('../../controllers/invitation-codes');
 
   beforeEach(function () {
     req_mock = {};
