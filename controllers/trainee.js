@@ -13,6 +13,7 @@ var TRAINEE_EXISTED = '学生存在';
 var REGISTER_SUCCESS = '注册成功';
 var APPRAISE_ADD_SUCCESS = '添加评价成功';
 var APPRAISED_ALREADY = '此条评价已存在已评价';
+var APPRAISES_ADD_SUCCESS = "评论批量添加成功";
 
 var get_trainee_by_id = function (req, res, next) {
 
@@ -180,7 +181,7 @@ var add_appraises = function (req, res, next) {
         next(err);
       });
   });
-  res.send({state: 200, data: trainees, message: APPRAISE_ADD_SUCCESS});
+  res.send({state: 200, data: trainees, message: APPRAISES_ADD_SUCCESS});
 };
 
 var add_appraises_date = function (trainees, type, callback) {
