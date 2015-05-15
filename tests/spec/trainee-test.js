@@ -1,6 +1,6 @@
 'use strict';
 
-describe('cart', function () {
+describe('trainee_controller', function () {
   var req_mock;
   var res_mock;
   var trainee_controller = require('../../controllers/trainee');

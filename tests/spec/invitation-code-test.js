@@ -1,6 +1,6 @@
 'use strict';
 
-describe('cart', function () {
+describe('invitation_code_controller', function () {
   var req_mock;
   var res_mock;
   var invitation_code_controller = require('../../controllers/invitation-code');
