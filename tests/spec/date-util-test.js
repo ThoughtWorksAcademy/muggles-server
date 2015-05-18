@@ -23,4 +23,15 @@ describe('date_util', function() {
     var result = date_util.format_date(appraise);
     expect(result).to.equal('20');
   });
+
+
+  it('should have a format_date method and it can return a formated month date', function() {
+
+    var appraise = {
+      type: '月',
+      appraised_date: new Date(2015, 4, 15)
+    };
+    var result = date_util.format_date(appraise);
+    expect(result).to.equal('2015-05');
+  });
 });
