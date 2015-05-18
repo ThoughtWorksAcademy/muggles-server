@@ -13,6 +13,8 @@ var TRAINEE_EXISTED = '学生存在';
 var REGISTER_SUCCESS = '注册成功';
 var APPRAISE_ADD_SUCCESS = '添加评价成功';
 var APPRAISED_ALREADY = '此条评价已存在已评价';
+var APPRAISES_ADD_SUCCESS = "评论批量添加成功";
+var APPRAISES_CAN_ADD = "该学生评价可以添加";
 
 var get_trainee_by_id = function (req, res, next) {
 
@@ -111,6 +113,7 @@ var add_appraise = function (req, res, next) {
   Trainee.findById(trainee_id)
     .populate('appraises')
     .exec()
+
     .then(function(trainee) {
       current_appraise.group = trainee.current_group.toString();
 
@@ -159,7 +162,6 @@ var add_appraises = function (req, res, next) {
       .exec()
       .then(function (trainee) {
         return _.find(trainee.appraises, function (one) {
-          console.log(date_util.find_formated_date(one) === date_util.find_formated_date(appraise));
           return (date_util.find_formated_date(one) === date_util.find_formated_date(appraise) && one.type === appraise.type && one.group === appraise.group);
         });
       })
@@ -181,7 +183,72 @@ var add_appraises = function (req, res, next) {
         next(err);
       });
   });
-  res.send({state: 200, data: trainees, message: APPRAISE_ADD_SUCCESS});
+  res.send({state: 200, data: trainees, message: APPRAISES_ADD_SUCCESS});
+};
+
+var add_appraises_date = function (trainees, type, callback) {
+
+  trainees.forEach(function (current_trainee) {
+    current_trainee.appraise.appraised_date = appraised_date;
+    current_trainee.appraise.type = type;
+    current_trainee.appraise.appraiser = appraiser;
+
+    Trainee.findById(current_trainee._id)
+      .populate('appraises')
+      .exec()
+      .then(function (trainee) {
+        return _.find(trainee.appraises, function (one) {
+          return (date_util.find_formated_date(one) === date_util.find_formated_date(appraise) && one.type === appraise.type && one.group === appraise.group);
+        });
+      })
+      .then(function (result) {
+        if (result) {
+          current_trainee.is_appraised = true;
+        } else {
+          current_trainee.is_appraised = false;
+          Appraise.create(current_trainee.appraise)
+            .then(function (appraise) {
+              return Trainee.findById(trainee._id, function (err, trainee) {
+                trainee.appraises.push(appraise._id);
+                trainee.save();
+              });
+            });
+        }
+      })
+      .onReject(function (err) {
+        next(err);
+      });
+  });
+};
+
+var is_appraised = function (req, res, next) {
+  var trainee_id = req.body.trainee._id;
+  var current_appraise = req.body.appraise;
+  Trainee.findById(trainee_id)
+  .populate('appraises')
+  .exec()
+
+  .then(function(trainee) {
+      current_appraise.group = trainee.current_group.toString();
+
+      return _.find(trainee.appraises, function (appraise) {
+        var is_the_same_day = (date_util.format_date(appraise) === date_util.format_date(current_appraise));
+        var is_the_same_group = (appraise.group.toString() === current_appraise.group);
+        var is_the_same_type = (appraise.type === current_appraise.type);
+        return is_the_same_day && is_the_same_group && is_the_same_type;
+      });
+    })
+  .then(function (result) {
+      if(result) {
+        res.send({state: 200, data: true, message: APPRAISED_ALREADY});
+      }else{
+        res.send({state: 200, data: false, message: APPRAISES_CAN_ADD});
+      }
+    })
+  .onReject(function (err) {
+      next(err);
+    });
+
 };
 
 module.exports = {
@@ -190,5 +257,6 @@ module.exports = {
   create_trainee: create_trainee,
   update_appraise: update_appraise,
   add_appraise: add_appraise,
-  add_appraises: add_appraises
+  add_appraises: add_appraises,
+  is_appraised: is_appraised
 };
