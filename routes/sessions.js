@@ -3,17 +3,12 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function (req, res) {
-  var currentTrainerName = req.session.currentTrainerName;
+var session_controller = require('../controllers/sessions');
 
-  res.send(currentTrainerName);
-});
+router.get('/', session_controller.get_current_trainer_name);
 
-router.delete('/', function (req, res) {
-  req.session.currentTrainerId = null;
-  req.session.currentTrainerName = null;
+router.post('/create', session_controller.create);
 
-  res.send({state: 200, data: {}});
-});
+router.delete('/destroy', session_controller.destroy);
 
 module.exports = router;

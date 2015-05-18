@@ -9,10 +9,6 @@ var Trainee = mongoose.model('Trainee');
 var LocalStrategy = require('passport-local').Strategy;
 var _ = require('lodash');
 
-var LOGIN_FAILURE = '邮箱或密码错误';
-var LOGIN_SUCCESS = '登录成功';
-var LOGOUT_SUCCESS = '退出成功';
-
 module.exports = function (passport) {
 
   passport.use('trainer', new LocalStrategy(
@@ -34,34 +30,6 @@ module.exports = function (passport) {
       });
     }
   ));
-
-  router.post('/login', function (req, res, next) {
-    var email = req.body.user.email;
-    var password = req.body.user.password;
-    var session = req.session;
-
-    Trainer.findOne({email: email})
-      .exec()
-      .then(function (user) {
-        if (!user || user.password !== password) {
-          return res.send({state: 401, data: true, message: LOGIN_FAILURE});
-        }
-
-        session.currentTrainerId = user._id;
-        session.currentTrainerName = user.username;
-
-        res.send({state: 200, data: false, message: LOGIN_SUCCESS});
-      })
-      .onReject(function (err) {
-
-        next(err);
-      })
-  });
-
-  router.delete('/', function (req, res) {
-    req.session.currentUserId = null;
-    req.session.currentUserName = null;
-  });
 
   router.post('/login', function (req, res, next) {
     passport.authenticate('trainer', function (err, user, info) {

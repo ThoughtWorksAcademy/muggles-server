@@ -92,12 +92,13 @@ var update_appraise = function(req, res, next) {
 
     .then(function(appraise) {
 
+      appraise.level = current_appraise.level;
       appraise.comment = current_appraise.comment;
       appraise.save();
       res.send({state: 200, data: appraise, message: '修改成功'})
     })
     .onReject(function(err) {
-        next(err);
+      next(err);
     });
 };
 

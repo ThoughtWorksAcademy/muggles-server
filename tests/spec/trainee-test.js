@@ -1,9 +1,9 @@
 'use strict';
 
-describe('cart', function () {
+describe('trainee_controller', function () {
   var req_mock;
   var res_mock;
-  var trainee_controller = require('../../controllers/trainee');
+  var trainee_controller = require('../../controllers/trainees');
 
   beforeEach(function () {
     req_mock = {};
@@ -18,7 +18,9 @@ describe('cart', function () {
 
     it('should get trainee by the id of trainee', function (done) {
 
-      req_mock.params.id = '550249080bf4a43115ef2dae';
+      req_mock.params = {
+        id : '550249080bf4a43115ef2dae'
+      };
       res_mock.send = function (object) {
 
         expect(object.state).to.equal(200);

@@ -5,6 +5,7 @@ var moment = require('moment');
 var DAY = '日';
 var WEEK = '周';
 var MONTH = '月';
+var SEASON_TYPE = '夏季';
 
 var format_date = function(appraise) {
 
@@ -20,30 +21,11 @@ var format_date = function(appraise) {
     result = moment(appraise.appraised_date).format('YYYY-MM');
   } else {
 
-    result = moment(appraise.appraised_date).format('YYYY-MM');
+    result = SEASON_TYPE;
   }
   return result;
 };
 
-var find_formated_date = function (appraise) {
-  var date = {};
-  if(appraise.type === DAY) {
-
-    date = moment(appraise.appraised_date).format('YYYY-MM-dd');
-  } else if(appraise.type === WEEK) {
-
-    date = moment(appraise.appraised_date).format('W');
-  } else if(appraise.type === MONTH) {
-
-    date =  moment(appraise.appraised_date).format('YYYY-MM');
-  } else {
-
-    date = moment(appraise.appraised_date).format('YYYY-MM');
-  }
-  return date;
-};
-
 module.exports = {
-  format_date: format_date,
-  find_formated_date: find_formated_date
+  format_date: format_date
 };
