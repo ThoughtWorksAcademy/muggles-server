@@ -74,6 +74,7 @@ var update_appraise = function(req, res, next) {
 
   var trainee_id = req.params.id;
   var current_appraise = req.body.appraise;
+  current_appraise.appraiser = req.session.currentTrainerId;
 
   Trainee.findById(trainee_id)
     .populate('appraises')
@@ -109,7 +110,7 @@ var add_appraise = function (req, res, next) {
   var trainee_id = req.params.id;
   var current_appraise = req.body;
 
-  current_appraise.appraiser = req.session.currentUserId;
+  current_appraise.appraiser = req.session.currentTrainerId;
   Trainee.findById(trainee_id)
     .populate('appraises')
     .exec()
