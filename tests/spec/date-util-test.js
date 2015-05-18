@@ -8,7 +8,7 @@ describe('date_util', function() {
 
     var appraise = {
       type: '日',
-      appraised_date: new Date()
+      appraised_date: new Date(2015, 4, 15)
     };
 
     var result = date_util.format_date(appraise);
