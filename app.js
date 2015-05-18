@@ -50,7 +50,7 @@ router(app, passport);
 
 if (app.get('env') === 'development') {
 
-  app.set('port', 3030);
+  app.set('port', 3000);
 
   app.use(express.static(path.join(__dirname, '../muggles-client')));
   // This covers serving up the index page
