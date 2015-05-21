@@ -130,7 +130,7 @@ var add_appraise = function (req, res, next) {
 
         res.send({state: 200, data: false, message: APPRAISED_ALREADY});
       } else {
-
+        console.log(current_appraise);
         Appraise.create(current_appraise)
           .then(function (appraise) {
             Trainee.findById(trainee_id, function (err, trainee) {
@@ -152,18 +152,19 @@ var add_appraises = function (req, res, next) {
   var type = req.body.appraise.type;
   var trainees = req.body.trainees;
   var result = [];
-
-  trainees.forEach(function (current_trainee) {
+  trainees.forEach(function (current_trainee, index) {
     current_trainee.appraise.appraised_date = appraised_date;
     current_trainee.appraise.type = type;
     current_trainee.appraise.appraiser = appraiser;
-
+    var appraise = current_trainee.appraise;
     Trainee.findById(current_trainee._id)
       .populate('appraises')
       .exec()
       .then(function (trainee) {
+        current_trainee.appraise.group = trainee.current_group.toString();
+
         return _.find(trainee.appraises, function (one) {
-          return (date_util.find_formated_date(one) === date_util.find_formated_date(appraise) && one.type === appraise.type && one.group === appraise.group);
+          return (date_util.format_date(one) === date_util.format_date(appraise) && one.type === appraise.type && one.group === appraise.group);
         });
       })
       .then(function (result) {
@@ -171,11 +172,17 @@ var add_appraises = function (req, res, next) {
           current_trainee.is_appraised = true;
         } else {
           current_trainee.is_appraised = false;
+          //console.log(current_trainee.appraise);
           Appraise.create(current_trainee.appraise)
             .then(function (appraise) {
-              return Trainee.findById(trainee._id, function (err, trainee) {
+              console.log(appraise);
+              Trainee.findById(current_trainee._id, function (err, trainee) {
+                console.log(trainee);
                 trainee.appraises.push(appraise._id);
-                trainee.save();
+                trainee.save(err, function (trainee) {
+                  console.log(trainee);
+
+                });
               });
             });
         }
@@ -183,8 +190,13 @@ var add_appraises = function (req, res, next) {
       .onReject(function (err) {
         next(err);
       });
+    console.log(trainees.length);
+    console.log(index);
+    if(index === trainees.length -1) {
+      console.log('send');
+      res.send({state: 200, data: trainees, message: APPRAISES_ADD_SUCCESS});
+    }
   });
-  res.send({state: 200, data: trainees, message: APPRAISES_ADD_SUCCESS});
 };
 
 var add_appraises_date = function (trainees, type, callback) {
@@ -231,17 +243,23 @@ var is_appraised = function (req, res, next) {
 
   .then(function(trainee) {
       current_appraise.group = trainee.current_group.toString();
-
+      //console.log(trainee);
       return _.find(trainee.appraises, function (appraise) {
+        //console.log(appraise);
         var is_the_same_day = (date_util.format_date(appraise) === date_util.format_date(current_appraise));
+        //console.log(is_the_same_day + '--------------day');
+
         var is_the_same_group = (appraise.group.toString() === current_appraise.group);
+        //console.log(is_the_same_group + '--------------group');
+
         var is_the_same_type = (appraise.type === current_appraise.type);
+        //console.log(is_the_same_type + '--------------type');
         return is_the_same_day && is_the_same_group && is_the_same_type;
       });
     })
   .then(function (result) {
       if(result) {
-        res.send({state: 200, data: true, message: APPRAISED_ALREADY});
+        res.send({state: 240, data: true, message: APPRAISED_ALREADY});
       }else{
         res.send({state: 200, data: false, message: APPRAISES_CAN_ADD});
       }
